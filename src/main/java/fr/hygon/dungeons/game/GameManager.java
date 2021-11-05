@@ -8,11 +8,18 @@ import fr.hygon.dungeons.waves.WaveManager;
 import fr.hygon.yokura.YokuraAPI;
 import fr.hygon.yokura.servers.Status;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+
+import java.time.Duration;
 import java.util.Map;
 
 public class GameManager {
@@ -51,18 +58,41 @@ public class GameManager {
                 }
 
                 timer--;
-                Bukkit.broadcast(Component.text("timer: " + timer)); //TODO
+                switch (timer) {
+                    case 20, 10, 5, 4, 3, 2, 1 -> {
+                        Bukkit.broadcast(Component.text("» ").color(TextColor.color(NamedTextColor.GRAY))
+                                .append(Component.text("La partie commence dans ").color(TextColor.color(255, 255, 75))
+                                        .append(Component.text(timer).color(TextColor.color(250, 65, 65)))
+                                        .append(Component.text(" secondes.").color(TextColor.color(255, 255, 75)))));
 
-                if(timer == 0) {
-                    Bukkit.broadcast(Component.text("Ça commence!")); //TODO
-                    YokuraAPI.setStatus(Status.IN_GAME);
-                    gameStatus = GameStatus.PLAYING;
+                        for(Player players : Bukkit.getOnlinePlayers()) {
+                            final Title.Times times = Title.Times.of(Duration.ofMillis(100), Duration.ofMillis(1500), Duration.ofMillis(100));
+                            final Title title = Title.title(Component.text(""), ((Component.text(timer).color(TextColor.color(255,255, 75)))), times);
+                            players.showTitle(title);
+                            players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1.0F, 1F);
+                        }
+                    }
+                    case 0 -> {
+                        YokuraAPI.setStatus(Status.IN_GAME);
+                        gameStatus = GameStatus.PLAYING;
 
-                    gameDifficulty = DifficultySelectorGUI.getDifficulty();
-                    Bukkit.broadcast(Component.text("Difficulté: ").append(gameDifficulty.getName())); //TODO
+                        gameDifficulty = DifficultySelectorGUI.getDifficulty();
 
-                    stopTask();
-                    startGame();
+                        stopTask();
+                        startGame();
+                        GameManager.setGameStatus(GameStatus.PLAYING);
+                        for(Player players : Bukkit.getOnlinePlayers()) {
+
+                            final Title.Times times = Title.Times.of(Duration.ofMillis(1000), Duration.ofMillis(5000), Duration.ofMillis(1000));
+                            final Title title = Title.title((Component.text("VAGUE 1").color(TextColor.color(200, 20, 20))
+                                    .decoration(TextDecoration.BOLD, true)), (Component.text("Difficulté: ").color(TextColor.color(255, 255, 75))
+                                    .append(gameDifficulty.getName())), times);
+
+                            players.showTitle(title);
+                            players.playSound(players.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1.0F, 0F);
+
+                        }
+                    }
                 }
                 oldPlayerCount = Bukkit.getOnlinePlayers().size();
             }

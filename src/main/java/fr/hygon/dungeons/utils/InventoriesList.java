@@ -8,11 +8,15 @@ import org.bukkit.inventory.Inventory;
 
 public enum InventoriesList {
     DIFFICULTY_SELECTOR((player) -> {
-        Inventory inventory = Bukkit.createInventory(null, 9, Component.text("Difficulté").color(TextColor.color(130, 130, 130)));
+        Inventory inventory = Bukkit.createInventory(null, 27, Component.text("Difficulté"));
 
-        inventory.setItem(0, ItemList.NORMAL_DIFFICULTY.getItem());
-        inventory.setItem(4, ItemList.HARD_DIFFICULTY.getItem());
-        inventory.setItem(8, ItemList.INSANE_DIFFICULTY.getItem());
+        for (int i = 0; i < 27 ; i++) {
+            inventory.setItem(i, ItemList.INVENTORY_FILLER.getItem());
+        }
+
+        inventory.setItem(11, ItemList.NORMAL_DIFFICULTY.getItem());
+        inventory.setItem(13, ItemList.HARD_DIFFICULTY.getItem());
+        inventory.setItem(15, ItemList.INSANE_DIFFICULTY.getItem());
         return inventory;
     });
 

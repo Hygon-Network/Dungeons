@@ -3,9 +3,15 @@ package fr.hygon.dungeons.events.gui;
 import fr.hygon.dungeons.utils.Difficulty;
 import fr.hygon.dungeons.utils.InventoriesList;
 import fr.hygon.dungeons.utils.ItemList;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -27,6 +33,7 @@ public class DifficultySelectorGUI extends GUI implements Listener {
 
         if(Objects.equals(clickedItem.getItemMeta().displayName(), ItemList.DIFFICULTY_SELECTOR.getItem().getItemMeta().displayName())) {
             openInventory(player, InventoriesList.DIFFICULTY_SELECTOR);
+            event.setCancelled(true);
         }
     }
 
@@ -37,15 +44,43 @@ public class DifficultySelectorGUI extends GUI implements Listener {
             return;
         ItemStack clickedItem = event.getCurrentItem();
         if(getPlayerOpenInventoryType(player, event.getInventory()) == InventoriesList.DIFFICULTY_SELECTOR) {
-            if(clickedItem.isSimilar(ItemList.NORMAL_DIFFICULTY.getItem())) {
+            event.setCancelled(true);
+            if(Objects.equals(clickedItem.getItemMeta().displayName(), ItemList.NORMAL_DIFFICULTY.getItem().getItemMeta().displayName())) {
                 playersVote.put(player, Difficulty.NORMAL);
                 closeInventory(player);
-            } else if(clickedItem.isSimilar(ItemList.HARD_DIFFICULTY.getItem())) {
+
+                Bukkit.broadcast(Component.text("☠").color(TextColor.color(170, 0, 0))
+                        .append(Component.text(" | ").color(TextColor.color(107, 107, 107)))
+                        .append(player.displayName()
+                        .append(Component.text(" a voté pour la ").color(TextColor.color(255, 255, 75))
+                        .append(Component.text("Difficulté Normale").color(TextColor.color(0, 170, 0))
+                        .append(Component.text(".").color(TextColor.color(TextColor.color(255, 255, 75))))))));
+
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 2, 0);
+            } else if(Objects.equals(clickedItem.getItemMeta().displayName(), ItemList.HARD_DIFFICULTY.getItem().getItemMeta().displayName())) {
                 playersVote.put(player, Difficulty.HARD);
                 closeInventory(player);
-            } else if(clickedItem.isSimilar(ItemList.INSANE_DIFFICULTY.getItem())) {
+
+                Bukkit.broadcast(Component.text("☠").color(TextColor.color(170, 0, 0))
+                        .append(Component.text(" | ").color(TextColor.color(107, 107, 107)))
+                        .append(player.displayName()
+                        .append(Component.text(" a voté pour la ").color(TextColor.color(255, 255, 75))
+                        .append(Component.text("Difficulté Hard").color(TextColor.color(220, 110, 30))
+                        .append(Component.text(".").color(TextColor.color(TextColor.color(255, 255, 75))))))));
+
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 2, 0);
+            } else if(Objects.equals(clickedItem.getItemMeta().displayName(), ItemList.INSANE_DIFFICULTY.getItem().getItemMeta().displayName())) {
                 playersVote.put(player, Difficulty.INSANE);
                 closeInventory(player);
+
+                Bukkit.broadcast(Component.text("☠").color(TextColor.color(170, 0, 0))
+                        .append(Component.text(" | ").color(TextColor.color(107, 107, 107)))
+                        .append(player.displayName()
+                        .append(Component.text(" a voté pour la ").color(TextColor.color(255, 255, 75))
+                        .append(Component.text("☠ Difficulté Insane ☠").color(TextColor.color(170, 30, 10))
+                        .append(Component.text(".").color(TextColor.color(TextColor.color(255, 255, 75))))))));
+
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 2, 0);
             }
         }
     }
