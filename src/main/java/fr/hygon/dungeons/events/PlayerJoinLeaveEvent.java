@@ -1,5 +1,6 @@
 package fr.hygon.dungeons.events;
 
+import fr.hygon.dungeons.utils.ItemList;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
@@ -21,6 +22,7 @@ public class PlayerJoinLeaveEvent implements Listener {
                 .append(Component.text("(" + Bukkit.getOnlinePlayers().size() + "/4)").color(TextColor.color(157, 157, 157))));
 
         player.getInventory().clear();
+        player.getInventory().setItem(8, ItemList.DIFFICULTY_SELECTOR.getItem());
     }
 
     @EventHandler

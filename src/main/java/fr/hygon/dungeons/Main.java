@@ -1,20 +1,42 @@
 package fr.hygon.dungeons;
 
+import fr.hygon.dungeons.events.gui.DifficultySelectorGUI;
 import fr.hygon.dungeons.events.PlayerJoinLeaveEvent;
+import fr.hygon.dungeons.game.GameManager;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
+    private static Plugin plugin;
+
     @Override
     public void onEnable() {
+        plugin = this;
         registerEvents();
+        startTasks();
     }
 
     @Override
     public void onDisable() {
-
+        stopTasks();
     }
 
     private void registerEvents() {
        getServer().getPluginManager().registerEvents(new PlayerJoinLeaveEvent(), this);
+
+       /* GUIs */
+        getServer().getPluginManager().registerEvents(new DifficultySelectorGUI(), this);
+    }
+
+    private void startTasks() {
+        GameManager.startTask();
+    }
+
+    private void stopTasks() {
+        GameManager.stopTask();
+    }
+
+    public static Plugin getPlugin() {
+        return plugin;
     }
 }
