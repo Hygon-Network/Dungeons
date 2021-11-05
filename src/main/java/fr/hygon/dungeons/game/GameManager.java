@@ -3,6 +3,8 @@ package fr.hygon.dungeons.game;
 import fr.hygon.dungeons.Main;
 import fr.hygon.dungeons.events.gui.DifficultySelectorGUI;
 import fr.hygon.dungeons.utils.Difficulty;
+import fr.hygon.dungeons.waves.WaveList;
+import fr.hygon.dungeons.waves.WaveManager;
 import fr.hygon.yokura.YokuraAPI;
 import fr.hygon.yokura.servers.Status;
 import net.kyori.adventure.text.Component;
@@ -59,8 +61,8 @@ public class GameManager {
                     gameDifficulty = DifficultySelectorGUI.getDifficulty();
                     Bukkit.broadcast(Component.text("Difficulté: ").append(gameDifficulty.getName())); //TODO
 
-                    startGame();
                     stopTask();
+                    startGame();
                 }
                 oldPlayerCount = Bukkit.getOnlinePlayers().size();
             }
@@ -75,6 +77,7 @@ public class GameManager {
     }
 
     private static void startGame() {
+        WaveList.initWaves();
         int locationArray = 0;
         Location[] locationSpawnArray = new Location[4];
         locationSpawnArray[0] = new Location(Bukkit.getWorld("world"), 0.5, 6, 1.5, 180, 0);
@@ -88,9 +91,19 @@ public class GameManager {
             //TODO players.teleport(locationSpawnArray[locationArray]);
             locationArray++;
         }
+
+        WaveManager.startTask();
+    }
+
+    public static GameStatus getGameStatus() {
+        return gameStatus;
     }
 
     public static Difficulty getGameDifficulty() {
         return gameDifficulty;
+    }
+
+    public static void setGameStatus(GameStatus gameStatus) {
+        GameManager.gameStatus = gameStatus;
     }
 }

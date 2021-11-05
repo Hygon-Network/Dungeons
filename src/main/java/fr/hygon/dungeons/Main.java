@@ -3,6 +3,8 @@ package fr.hygon.dungeons;
 import fr.hygon.dungeons.events.gui.DifficultySelectorGUI;
 import fr.hygon.dungeons.events.PlayerJoinLeaveEvent;
 import fr.hygon.dungeons.game.GameManager;
+import fr.hygon.dungeons.utils.PlayerUtils;
+import fr.hygon.dungeons.waves.WaveManager;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,6 +25,7 @@ public class Main extends JavaPlugin {
 
     private void registerEvents() {
        getServer().getPluginManager().registerEvents(new PlayerJoinLeaveEvent(), this);
+       getServer().getPluginManager().registerEvents(new PlayerUtils(), this);
 
        /* GUIs */
         getServer().getPluginManager().registerEvents(new DifficultySelectorGUI(), this);
@@ -34,6 +37,7 @@ public class Main extends JavaPlugin {
 
     private void stopTasks() {
         GameManager.stopTask();
+        WaveManager.stopTask();
     }
 
     public static Plugin getPlugin() {
