@@ -26,6 +26,7 @@ public class Main extends JavaPlugin {
     private void registerEvents() {
        getServer().getPluginManager().registerEvents(new PlayerJoinLeaveEvent(), this);
        getServer().getPluginManager().registerEvents(new PlayerUtils(), this);
+       getServer().getPluginManager().registerEvents(new WaveManager(), this);
 
        /* GUIs */
         getServer().getPluginManager().registerEvents(new DifficultySelectorGUI(), this);
