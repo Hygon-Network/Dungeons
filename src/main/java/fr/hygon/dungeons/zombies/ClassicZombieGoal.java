@@ -1,5 +1,6 @@
 package fr.hygon.dungeons.zombies;
 
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.ai.goal.Goal;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
@@ -9,14 +10,14 @@ public class ClassicZombieGoal extends Goal {
     private final CustomZombie zombie;
     private final double speed;
     private final double reach;
-    private final double damage;
+    private final float damage;
 
     private Player followedPlayer = null;
     private int ticksSinceLastSearch = 7 * 20;
 
-    private int raiseArmTicks = 0;
+    private int ticksSinceLastDamage = 0;
 
-    public ClassicZombieGoal(CustomZombie zombie, double speed, double reach, double damage) {
+    public ClassicZombieGoal(CustomZombie zombie, double speed, double reach, float damage) {
         this.zombie = zombie;
         this.speed = speed;
         this.reach = reach;
@@ -42,8 +43,18 @@ public class ClassicZombieGoal extends Goal {
         zombie.getNavigation().moveTo(((CraftPlayer) followedPlayer).getHandle(), speed);
 
         if(zombie.getBukkitEntity().getLocation().distance(followedPlayer.getLocation()) <= reach) {
-            zombie.setAggressive(true);
-            followedPlayer.damage(damage, zombie.getBukkitMonster());
+            ticksSinceLastDamage++;
+            if(ticksSinceLastDamage <= 15) {
+                zombie.setAggressive(false);
+            } else if(ticksSinceLastDamage <= 20) {
+                if(ticksSinceLastDamage == 16) {
+                    ((CraftPlayer) followedPlayer).getHandle().hurt(DamageSource.mobAttack(zombie), damage);
+                }
+                zombie.setAggressive(true);
+            } else {
+                zombie.setAggressive(false);
+                ticksSinceLastDamage = 0;
+            }
         } else {
             zombie.setAggressive(false);
         }

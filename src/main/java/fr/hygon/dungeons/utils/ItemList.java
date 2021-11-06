@@ -76,6 +76,17 @@ public enum ItemList {
         inventoryFiller.setItemMeta(inventoryFillerMeta);
 
         return inventoryFiller;
+    }),
+    BREAD(() -> {
+        ItemStack bread = new ItemStack(Material.BREAD, 1);
+        ItemMeta breadMeta = bread.getItemMeta();
+
+        breadMeta.displayName(Component.text("Pain").color(NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false));
+        breadMeta.lore(Arrays.asList(Component.text("Un morceau de pain, volé à la boulangerie").color(NamedTextColor.DARK_GRAY),
+                Component.text("du coin par un zombie.").color(NamedTextColor.DARK_GRAY)));
+        bread.setItemMeta(breadMeta);
+
+        return bread;
     });
 
 

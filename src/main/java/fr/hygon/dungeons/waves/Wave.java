@@ -10,7 +10,6 @@ public class Wave {
     private List<CustomZombie> zombies;
 
     public Wave(int maxZombies) {
-        System.out.println(Math.ceil(maxZombies + maxZombies / 100.0 * (double) GameManager.getGameDifficulty().getZombiesMultiplier()));
         maxZombies = (int) Math.ceil(maxZombies + maxZombies / 100.0 * (double) GameManager.getGameDifficulty().getZombiesMultiplier());
         this.maxZombies = maxZombies;
     }

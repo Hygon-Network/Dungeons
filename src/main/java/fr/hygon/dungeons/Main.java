@@ -1,5 +1,6 @@
 package fr.hygon.dungeons;
 
+import fr.hygon.dungeons.events.ZombieUtils;
 import fr.hygon.dungeons.events.gui.DifficultySelectorGUI;
 import fr.hygon.dungeons.events.PlayerJoinLeaveEvent;
 import fr.hygon.dungeons.game.GameManager;
@@ -27,6 +28,7 @@ public class Main extends JavaPlugin {
        getServer().getPluginManager().registerEvents(new PlayerJoinLeaveEvent(), this);
        getServer().getPluginManager().registerEvents(new PlayerUtils(), this);
        getServer().getPluginManager().registerEvents(new WaveManager(), this);
+       getServer().getPluginManager().registerEvents(new ZombieUtils(), this);
 
        /* GUIs */
         getServer().getPluginManager().registerEvents(new DifficultySelectorGUI(), this);
