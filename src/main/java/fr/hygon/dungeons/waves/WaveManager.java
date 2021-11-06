@@ -41,26 +41,22 @@ public class WaveManager implements Listener {
             @Override
             public void run() {
                 if(GameManager.getGameStatus() == GameStatus.PLAYING) {
-                    timer--;
-                    if(timer == 0) {
-                        if(aliveZombies != 0) { // TODO make it better, it's a bit redundant
-                            timer = 3;
+                    if(!wave.hasZombiesLeft() && aliveZombies == 0) {
+                        GameManager.setGameStatus(GameStatus.PAUSE_TIME);
+                        waveId++;
+                        if(waveId == 26) {
+                            // TODO end the game
+                            return;
                         }
-
-                        if(wave.hasZombiesLeft()) {
+                        wave = WaveList.getWave(waveId);
+                        timer = 31; // put 31 so players can see it
+                    } else if(wave.hasZombiesLeft()) {
+                        timer--;
+                        if(timer == 0) {
                             CustomZombie customZombie = wave.getZombie();
                             nmsWorld.addEntity(customZombie, CreatureSpawnEvent.SpawnReason.CUSTOM);
                             aliveZombies++;
                             timer = 3;
-                        } else if(aliveZombies == 0) {
-                            GameManager.setGameStatus(GameStatus.PAUSE_TIME);
-                            waveId++;
-                            if(waveId == 26) {
-                                // TODO end the game
-                                return;
-                            }
-                            wave = WaveList.getWave(waveId);
-                            timer = 31; // put 31 so players can see it
                         }
                     }
                 } else if(GameManager.getGameStatus() == GameStatus.PAUSE_TIME) {
