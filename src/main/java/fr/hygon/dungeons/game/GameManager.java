@@ -2,7 +2,10 @@ package fr.hygon.dungeons.game;
 
 import fr.hygon.dungeons.Main;
 import fr.hygon.dungeons.events.gui.DifficultySelectorGUI;
+import fr.hygon.dungeons.shop.ArmorList;
 import fr.hygon.dungeons.utils.Difficulty;
+import fr.hygon.dungeons.utils.ItemList;
+import fr.hygon.dungeons.utils.PlayerUtils;
 import fr.hygon.dungeons.waves.WaveList;
 import fr.hygon.dungeons.waves.WaveManager;
 import fr.hygon.yokura.YokuraAPI;
@@ -117,6 +120,8 @@ public class GameManager {
 
         for(Player players : Bukkit.getOnlinePlayers()) {
             //TODO players.getInventory().clear();
+            players.getInventory().setItem(8, ItemList.RADIO_OFF.getItem());
+            PlayerUtils.buyArmor(players, ArmorList.getArmorFromLevel(1));
 
             //TODO players.teleport(locationSpawnArray[locationArray]);
             locationArray++;

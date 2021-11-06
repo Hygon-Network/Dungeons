@@ -3,6 +3,7 @@ package fr.hygon.dungeons;
 import fr.hygon.dungeons.events.ZombieUtils;
 import fr.hygon.dungeons.events.gui.DifficultySelectorGUI;
 import fr.hygon.dungeons.events.PlayerJoinLeaveEvent;
+import fr.hygon.dungeons.events.gui.ShopGUI;
 import fr.hygon.dungeons.game.GameManager;
 import fr.hygon.dungeons.utils.PlayerUtils;
 import fr.hygon.dungeons.waves.WaveManager;
@@ -32,6 +33,7 @@ public class Main extends JavaPlugin {
 
        /* GUIs */
         getServer().getPluginManager().registerEvents(new DifficultySelectorGUI(), this);
+        getServer().getPluginManager().registerEvents(new ShopGUI(), this);
     }
 
     private void startTasks() {

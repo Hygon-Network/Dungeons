@@ -5,12 +5,10 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
-import org.bukkit.block.Skull;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
@@ -87,6 +85,80 @@ public enum ItemList {
         bread.setItemMeta(breadMeta);
 
         return bread;
+    }),
+    RADIO_OFF(() -> {
+        ItemStack radioOff = new ItemStack(Material.PLAYER_HEAD, 1);
+        SkullMeta radioOffMeta = (SkullMeta) radioOff.getItemMeta();
+
+        radioOffMeta.displayName(Component.text("Radio brouillée").color(TextColor.color(90, 90, 90)));
+        radioOffMeta.setBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5l" +
+                "Y3JhZnQubmV0L3RleHR1cmUvNGMzYzg1MTc1MTZmOGQ4ZTgwNjc3ODFlN2M2MmVlYTI3ZGU0NzhiMTRjNGE2OGM4ZThjMWFkOGFmMWJhZTIxIn19fQ==");
+        radioOff.setItemMeta(radioOffMeta);
+
+        return radioOff;
+    }),
+    RADIO_ON(() -> {
+        ItemStack radioOn = new ItemStack(Material.PLAYER_HEAD, 1);
+        SkullMeta radioOnMeta = (SkullMeta) radioOn.getItemMeta();
+
+        radioOnMeta.displayName(Component.text("Radio").color(TextColor.color(90, 90, 90))
+                .decoration(TextDecoration.ITALIC, false));
+        radioOnMeta.setBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZn" +
+                "QubmV0L3RleHR1cmUvZGViZGVhMmI1YzRkYjVmYTQ0YTRlYzQwMzI2NTgzMmZhN2QxY2FmYThjNGE2Y2Y3ZmE2OTYwYmJhY2Q3In19fQ==");
+        radioOn.setItemMeta(radioOnMeta);
+
+        return radioOn;
+    }),
+    SHOP_SWORD(() -> {
+        ItemStack shopSword = new ItemStack(Material.STONE_SWORD, 1);
+        ItemMeta shopSwordMeta = shopSword.getItemMeta();
+
+        shopSwordMeta.displayName(Component.text("Épées").color(TextColor.color(200, 20, 20))
+                .decoration(TextDecoration.ITALIC, false));
+        shopSword.setItemMeta(shopSwordMeta);
+        shopSword.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+
+        return shopSword;
+    }),
+    ARMOR_SHOP(() -> {
+        ItemStack armorShop = new ItemStack(Material.IRON_CHESTPLATE, 1);
+        ItemMeta armorShopMeta = armorShop.getItemMeta();
+
+        armorShopMeta.displayName(Component.text("Armures").color(TextColor.color(55, 165, 245))
+                .decoration(TextDecoration.ITALIC, false));
+        armorShop.setItemMeta(armorShopMeta);
+        armorShop.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+
+        return armorShop;
+    }),
+    BACK_MENU(() -> {
+        ItemStack backMenu = new ItemStack(Material.ARROW, 1);
+        ItemMeta backMenuMeta = backMenu.getItemMeta();
+
+        backMenuMeta.displayName(Component.text("Back").color(NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false));
+        backMenu.setItemMeta(backMenuMeta);
+
+        return backMenu;
+    }),
+    ACTUAL_ARMOR(() -> {
+        ItemStack actualArmor = new ItemStack(Material.LIME_DYE, 1);
+        ItemMeta actualArmorMeta = actualArmor.getItemMeta();
+
+        actualArmorMeta.displayName(Component.text("Armure Actuelle").color(TextColor.color(70, 185, 30))
+                .decoration(TextDecoration.ITALIC, false));
+        actualArmor.setItemMeta(actualArmorMeta);
+
+        return actualArmor;
+    }),
+    BUY_OBJECT(() -> {
+        ItemStack buyObject = new ItemStack(Material.LIGHT_BLUE_DYE, 1);
+        ItemMeta buyObjectMeta = buyObject.getItemMeta();
+
+        buyObjectMeta.displayName(Component.text("Acheter").color(TextColor.color(40, 185, 210))
+                .decoration(TextDecoration.ITALIC, false));
+        buyObject.setItemMeta(buyObjectMeta);
+
+        return buyObject;
     });
 
 

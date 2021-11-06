@@ -3,6 +3,7 @@ package fr.hygon.dungeons.waves;
 import fr.hygon.dungeons.Main;
 import fr.hygon.dungeons.game.GameManager;
 import fr.hygon.dungeons.game.GameStatus;
+import fr.hygon.dungeons.utils.ItemList;
 import fr.hygon.dungeons.zombies.CustomZombie;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -50,6 +51,7 @@ public class WaveManager implements Listener {
                         }
                         wave = WaveList.getWave(waveId);
                         timer = 30;
+                        Bukkit.getOnlinePlayers().forEach(player -> player.getInventory().setItem(8, ItemList.RADIO_ON.getItem()));
                     } else if(wave.hasZombiesLeft()) {
                         timer--;
                         if(timer == 0) {
@@ -60,13 +62,11 @@ public class WaveManager implements Listener {
                         }
                     }
                 } else if(GameManager.getGameStatus() == GameStatus.PAUSE_TIME) {
-
                     Bukkit.getOnlinePlayers().forEach(players -> players.sendActionBar(Component.text("Prochaine Vague").color(TextColor.color(250, 65, 65))
                             .append(Component.text(" » ").color(TextColor.color(120,120,120))
                             .append(Component.text(timer + "s").color(TextColor.color(255, 255, 75))))));
 
                     switch (timer) {
-
                         case 30 -> {
                             Bukkit.broadcast(Component.text("☠").color(TextColor.color(170, 0, 0))
                                     .append(Component.text(" | ").color(TextColor.color(107, 107, 107)))
@@ -74,7 +74,7 @@ public class WaveManager implements Listener {
                                             .append(Component.text(timer).color(TextColor.color(250, 65, 65)))
                                                     .append(Component.text("s.").color(TextColor.color(255, 255, 75)))));
 
-                            //TODO do a recap of what the player earned during the wave
+                            //TODO do a recap of what the player has earned during the wave
 
                             for(Player players : Bukkit.getOnlinePlayers()) {
                                 final Title.Times times = Title.Times.of(Duration.ofMillis(100), Duration.ofMillis(1500), Duration.ofMillis(100));
@@ -83,7 +83,6 @@ public class WaveManager implements Listener {
                                 players.playSound(players.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.5F);
                             }
                         }
-
                         case 15, 3, 2, 1 -> {
                             Bukkit.broadcast(Component.text("☠").color(TextColor.color(170, 0, 0))
                                     .append(Component.text(" | ").color(TextColor.color(107, 107, 107)))
@@ -109,7 +108,7 @@ public class WaveManager implements Listener {
                                             .append(Component.text(wave.getMaxZombies() + " Zombies").color(TextColor.color(255, 255, 75)))));
 
                             for(Player players : Bukkit.getOnlinePlayers()) {
-
+                                players.getInventory().setItem(8, ItemList.RADIO_OFF.getItem());
                                 switch (waveId) {
                                     case 10, 20, 25 -> {
                                         final Title.Times times = Title.Times.of(Duration.ofMillis(1000), Duration.ofMillis(5000), Duration.ofMillis(1000));
@@ -128,20 +127,23 @@ public class WaveManager implements Listener {
                                         players.playSound(players.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1.0F, 0F);
                                     }
                                 }
-
                             }
                         }
                     }
                     timer--;
                 }
             }
-        }.runTaskTimer(Main.getPlugin(), 0, 20);
+        }.runTaskTimer(Main.getPlugin(), 0, 1);
     }
 
     public static void stopTask() {
         if(task != null) {
             task.cancel();
         }
+    }
+
+    public static int getWave() {
+        return waveId;
     }
 
     @EventHandler
