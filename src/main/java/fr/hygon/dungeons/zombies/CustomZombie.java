@@ -35,11 +35,8 @@ public class CustomZombie extends Zombie {
         // TODO set position
         setPos(0.5, 6, 1.5);
         setCustomNameVisible(true);
-        setAttribute(Attribute.GENERIC_MAX_HEALTH, health);
-    }
-
-    private void setAttribute(Attribute attribute, double value) {
-        Objects.requireNonNull(getBukkitLivingEntity().getAttribute(attribute)).setBaseValue(value);
+        getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
+        setHealth(health);
     }
 
     @Override
@@ -62,5 +59,9 @@ public class CustomZombie extends Zombie {
 
     public double getCoins() {
         return coins;
+    }
+
+    public void dropSpecialItem() {
+
     }
 }
