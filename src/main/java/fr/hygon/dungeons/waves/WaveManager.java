@@ -28,7 +28,7 @@ public class WaveManager implements Listener {
 
     private static int waveId = 1;
     private static Wave wave = null;
-    private static int timer = 3;
+    private static int timer = 6;
 
     private static int aliveZombies = 0;
 
@@ -49,7 +49,7 @@ public class WaveManager implements Listener {
                             return;
                         }
                         wave = WaveList.getWave(waveId);
-                        timer = 31; // put 31 so players can see it
+                        timer = 30;
                     } else if(wave.hasZombiesLeft()) {
                         timer--;
                         if(timer == 0) {
@@ -60,10 +60,33 @@ public class WaveManager implements Listener {
                         }
                     }
                 } else if(GameManager.getGameStatus() == GameStatus.PAUSE_TIME) {
-                    timer--;
+
+                    Bukkit.getOnlinePlayers().forEach(players -> players.sendActionBar(Component.text("Prochaine Vague").color(TextColor.color(250, 65, 65))
+                            .append(Component.text(" » ").color(TextColor.color(120,120,120))
+                            .append(Component.text(timer + "s").color(TextColor.color(255, 255, 75))))));
+
                     switch (timer) {
-                        case 30, 15, 3, 2, 1 -> {
-                            Bukkit.broadcast(Component.text("» ").color(TextColor.color(NamedTextColor.GRAY))
+
+                        case 30 -> {
+                            Bukkit.broadcast(Component.text("☠").color(TextColor.color(170, 0, 0))
+                                    .append(Component.text(" | ").color(TextColor.color(107, 107, 107)))
+                                    .append(Component.text("Vague Dégagée! La partie reprend dans ").color(TextColor.color(255, 255, 75))
+                                            .append(Component.text(timer).color(TextColor.color(250, 65, 65)))
+                                                    .append(Component.text("s.").color(TextColor.color(255, 255, 75)))));
+
+                            //TODO do a recap of what the player earned during the wave
+
+                            for(Player players : Bukkit.getOnlinePlayers()) {
+                                final Title.Times times = Title.Times.of(Duration.ofMillis(100), Duration.ofMillis(1500), Duration.ofMillis(100));
+                                final Title title = Title.title(Component.text(""), ((Component.text("Vague Dégagée!").color(TextColor.color(255,255, 75)))), times);
+                                players.showTitle(title);
+                                players.playSound(players.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.5F);
+                            }
+                        }
+
+                        case 15, 3, 2, 1 -> {
+                            Bukkit.broadcast(Component.text("☠").color(TextColor.color(170, 0, 0))
+                                    .append(Component.text(" | ").color(TextColor.color(107, 107, 107)))
                                     .append(Component.text("La partie reprend dans ").color(TextColor.color(255, 255, 75))
                                             .append(Component.text(timer).color(TextColor.color(250, 65, 65)))
                                                     .append(Component.text("s.").color(TextColor.color(255, 255, 75)))));
@@ -76,9 +99,17 @@ public class WaveManager implements Listener {
                             }
                         }
                         case 0 -> {
-                            timer = 3;
+                            timer = 6;
                             GameManager.setGameStatus(GameStatus.PLAYING);
+
+                            Bukkit.broadcast(Component.text("☠").color(TextColor.color(170, 0, 0))
+                                    .append(Component.text(" | ").color(TextColor.color(107, 107, 107)))
+                                    .append(Component.text("Vague" + waveId).color(TextColor.color(200, 20, 20))
+                                            .append(Component.text(" » ").color(TextColor.color(NamedTextColor.GRAY)))
+                                            .append(Component.text(wave.getMaxZombies() + " Zombies").color(TextColor.color(255, 255, 75)))));
+
                             for(Player players : Bukkit.getOnlinePlayers()) {
+
                                 switch (waveId) {
                                     case 10, 20, 25 -> {
                                         final Title.Times times = Title.Times.of(Duration.ofMillis(1000), Duration.ofMillis(5000), Duration.ofMillis(1000));
@@ -101,6 +132,7 @@ public class WaveManager implements Listener {
                             }
                         }
                     }
+                    timer--;
                 }
             }
         }.runTaskTimer(Main.getPlugin(), 0, 20);
