@@ -4,7 +4,6 @@ import fr.hygon.dungeons.utils.ItemList;
 import fr.hygon.dungeons.utils.PlayerUtils;
 import fr.hygon.dungeons.zombies.CustomZombie;
 import net.kyori.adventure.text.Component;
-import net.minecraft.world.effect.MobEffects;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftZombie;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
@@ -27,7 +26,11 @@ public class ZombieUtils implements Listener {
             if(playerDamager.getInventory().getItemInMainHand().getType() ==
                     PlayerUtils.getPlayerSword(playerDamager).getSwordProvider().getSword().getType()) {
                 event.setDamage(0);
-                event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, PlayerUtils.getPlayerSword(playerDamager).getDamage() + (isCritical ? 1 : 0));
+                if(SwordDamage.canHit(playerDamager)) {
+                    event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, PlayerUtils.getPlayerSword(playerDamager).getDamage() + (isCritical ? 1 : 0));
+                } else {
+                    event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, 0);
+                }
             }
 
 
