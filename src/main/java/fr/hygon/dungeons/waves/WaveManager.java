@@ -133,7 +133,7 @@ public class WaveManager implements Listener {
                     timer--;
                 }
             }
-        }.runTaskTimer(Main.getPlugin(), 0, 1);
+        }.runTaskTimer(Main.getPlugin(), 0, 20);
     }
 
     public static void stopTask() {
