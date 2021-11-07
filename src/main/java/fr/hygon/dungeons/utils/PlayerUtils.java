@@ -1,6 +1,7 @@
 package fr.hygon.dungeons.utils;
 
 import fr.hygon.dungeons.shop.ArmorList;
+import fr.hygon.dungeons.shop.SwordList;
 import fr.hygon.dungeons.waves.WaveManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 public class PlayerUtils implements Listener {
     private static final HashMap<Player, Double> playerCoins = new HashMap<>();
     private static final HashMap<Player, Integer> armorsLevel = new HashMap<>();
+    private static final HashMap<Player, Integer> swordLevel = new HashMap<>();
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
@@ -65,5 +67,32 @@ public class PlayerUtils implements Listener {
 
     public static ArmorList getPlayerFutureArmor(Player player) {
         return ArmorList.getArmorFromLevel(armorsLevel.getOrDefault(player, 1) + 1);
+    }
+
+    public static void buySword(Player player, SwordList sword) {
+        addCoins(player, sword.getPrice());
+        if(PlayerUtils.getCoins(player) < sword.getPrice()) {
+            player.sendMessage(Component.text("Vous n'avez pas assez d'argent.").color(TextColor.color(170, 20, 20)));
+            return;
+        }
+
+        removeCoins(player, sword.getPrice());
+        swordLevel.put(player, sword.getSwordLevel());
+        sword.equipPlayer(player);
+    }
+
+    public static void upgradeSword(Player player) {
+        SwordList newSword = SwordList.getSwordFromLevel(swordLevel.getOrDefault(player, 1) + 1);
+        if(newSword != null) {
+            buySword(player, newSword);
+        }
+    }
+
+    public static SwordList getPlayerSword(Player player) {
+        return SwordList.getSwordFromLevel(swordLevel.getOrDefault(player, 1));
+    }
+
+    public static SwordList getPlayerFutureSword(Player player) {
+        return SwordList.getSwordFromLevel(swordLevel.getOrDefault(player, 1) + 1);
     }
 }

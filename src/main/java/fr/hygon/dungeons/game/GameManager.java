@@ -3,6 +3,7 @@ package fr.hygon.dungeons.game;
 import fr.hygon.dungeons.Main;
 import fr.hygon.dungeons.events.gui.DifficultySelectorGUI;
 import fr.hygon.dungeons.shop.ArmorList;
+import fr.hygon.dungeons.shop.SwordList;
 import fr.hygon.dungeons.utils.Difficulty;
 import fr.hygon.dungeons.utils.ItemList;
 import fr.hygon.dungeons.utils.PlayerUtils;
@@ -122,6 +123,7 @@ public class GameManager {
             //TODO players.getInventory().clear();
             players.getInventory().setItem(8, ItemList.RADIO_OFF.getItem());
             PlayerUtils.buyArmor(players, ArmorList.getArmorFromLevel(1));
+            PlayerUtils.buySword(players, SwordList.getSwordFromLevel(1));
 
             //TODO players.teleport(locationSpawnArray[locationArray]);
             locationArray++;

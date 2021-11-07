@@ -1,5 +1,6 @@
 package fr.hygon.dungeons.utils;
 
+import fr.hygon.dungeons.shop.SwordList;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -9,6 +10,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -71,7 +73,43 @@ public enum InventoriesList {
 
         inventory.setItem(41, buyArmor);
         return inventory;
-    }));
+    })),
+    SWORD_GUI(player -> {
+        Inventory inventory = Bukkit.createInventory(null, 27, Component.text("Épées"));
+
+        for (int slot = 0; slot < inventory.getSize(); slot++) {
+            inventory.setItem(slot, ItemList.INVENTORY_FILLER.getItem());
+        }
+
+        inventory.setItem(18, ItemList.BACK_MENU.getItem());
+
+        int slot = 11;
+        for(SwordList swords : SwordList.values()) {
+            if(swords == SwordList.WOOD_SWORD) continue;
+
+            ItemStack swordItem = swords.getSwordProvider().getSword();
+            ItemMeta swordItemMeta = swordItem.getItemMeta();
+            ArrayList<Component> lore = new ArrayList<>();
+
+            if(PlayerUtils.getPlayerFutureSword(player).getSwordLevel() == swords.getSwordLevel()) {
+                lore.add(Component.text("Cliquez pour acheter"));
+            } else if(PlayerUtils.getPlayerSword(player).getSwordLevel() >= swords.getSwordLevel()) {
+                lore.add(Component.text("Épée déjà achetée"));
+            } else {
+                lore.add(Component.text("Débloquez l'").append(SwordList.getSwordFromLevel(swords.getSwordLevel() - 1).getName())
+                        .append(Component.text(" avant.")));
+            }
+
+            swordItemMeta.lore(lore);
+            swordItemMeta.displayName(swords.getName());
+            swordItem.setItemMeta(swordItemMeta);
+
+            inventory.setItem(slot, swordItem);
+            slot++;
+        }
+
+        return inventory;
+    });
 
     private final InventorySupplier inventorySupplier;
 

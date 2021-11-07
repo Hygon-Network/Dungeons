@@ -41,11 +41,24 @@ public class ShopGUI extends GUI implements Listener {
                     return;
                 }
                 openInventory(player, InventoriesList.ARMOR_GUI);
+            } else if(clickedItem.isSimilar(ItemList.SHOP_SWORD.getItem())) {
+                openInventory(player, InventoriesList.SWORD_GUI);
             }
         } else if(getPlayerOpenInventoryType(player, event.getInventory()) == InventoriesList.ARMOR_GUI) {
             event.setCancelled(true);
             if(Objects.equals(clickedItem.getItemMeta().displayName(), ItemList.BUY_OBJECT.getItem().getItemMeta().displayName())) {
                 PlayerUtils.upgradeArmor(player);
+                openInventory(player, InventoriesList.SHOP);
+            } else if(clickedItem.isSimilar(ItemList.BACK_MENU.getItem())) {
+                openInventory(player, InventoriesList.SHOP);
+            }
+        } else if(getPlayerOpenInventoryType(player, event.getInventory()) == InventoriesList.SWORD_GUI) {
+            event.setCancelled(true);
+            if(clickedItem.getType() == ItemList.INVENTORY_FILLER.getItem().getType()) return;
+
+            if(PlayerUtils.getPlayerFutureSword(player) != null &&
+                    PlayerUtils.getPlayerFutureSword(player).getSwordProvider().getSword().getType() == clickedItem.getType()) {
+                PlayerUtils.upgradeSword(player);
                 openInventory(player, InventoriesList.SHOP);
             } else if(clickedItem.isSimilar(ItemList.BACK_MENU.getItem())) {
                 openInventory(player, InventoriesList.SHOP);
