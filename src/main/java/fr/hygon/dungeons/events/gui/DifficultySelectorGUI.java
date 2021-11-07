@@ -36,6 +36,7 @@ public class DifficultySelectorGUI extends GUI implements Listener {
             } else {
                 cooldown.put(player, System.currentTimeMillis());
                 openInventory(player, InventoriesList.DIFFICULTY_SELECTOR);
+                player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, 2, 1);
                 event.setCancelled(true);
             }
         }
