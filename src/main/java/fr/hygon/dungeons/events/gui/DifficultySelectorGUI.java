@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 public class DifficultySelectorGUI extends GUI implements Listener {
     private static final HashMap<Player, Difficulty> playersVote = new HashMap<>();
+    private static final HashMap<Player, Long> cooldown = new HashMap<>();
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
@@ -30,8 +31,13 @@ public class DifficultySelectorGUI extends GUI implements Listener {
         ItemStack clickedItem = event.getItem();
 
         if(Objects.equals(clickedItem.getItemMeta().displayName(), ItemList.DIFFICULTY_SELECTOR.getItem().getItemMeta().displayName())) {
-            openInventory(player, InventoriesList.DIFFICULTY_SELECTOR);
-            event.setCancelled(true);
+            if(cooldown.containsKey(player) && cooldown.get(player) + 3000 > System.currentTimeMillis()) {
+                player.sendMessage(Component.text("Veuillez attendre 3s.").color(TextColor.color(180, 20, 20)));
+            } else {
+                cooldown.put(player, System.currentTimeMillis());
+                openInventory(player, InventoriesList.DIFFICULTY_SELECTOR);
+                event.setCancelled(true);
+            }
         }
     }
 
