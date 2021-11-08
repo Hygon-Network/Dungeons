@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -69,6 +70,11 @@ public class SwordDamage implements Listener {
         updateItemDamage(player, item);
     }
 
+    @EventHandler
+    public void onItemDamage(PlayerItemDamageEvent event) {
+        event.setCancelled(true);
+    }
+
     private static int getDifficultyMaxHits() {
         return hitsBeforeItemBreak.get(GameManager.getGameDifficulty());
     }
@@ -96,7 +102,6 @@ public class SwordDamage implements Listener {
     }
 
     public static boolean canHit(Player player) {
-        System.out.println(playersHits.getOrDefault(player, 0) + " " + getDifficultyMaxHits());
         return playersHits.getOrDefault(player, 0) < getDifficultyMaxHits();
     }
 
