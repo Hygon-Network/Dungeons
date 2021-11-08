@@ -2,6 +2,7 @@ package fr.hygon.dungeons.utils;
 
 import fr.hygon.dungeons.shop.SwordList;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
@@ -9,10 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public enum InventoriesList {
     DIFFICULTY_SELECTOR((player) -> {
@@ -39,7 +37,7 @@ public enum InventoriesList {
         return inventory;
     })),
     ARMOR_GUI((player -> {
-        Inventory inventory = Bukkit.createInventory(null, 45, Component.text("Armures"));
+        Inventory inventory = Bukkit.createInventory(null, 45, Component.text("Shop > Armures"));
 
         for (int i = 0; i < inventory.getSize(); i++) {
             inventory.setItem(i, ItemList.INVENTORY_FILLER.getItem());
@@ -54,7 +52,18 @@ public enum InventoriesList {
 
         ItemStack actualArmor = ItemList.ACTUAL_ARMOR.getItem();
         ItemMeta actualArmorMeta = actualArmor.getItemMeta();
-        actualArmorMeta.lore(List.of(PlayerUtils.getPlayerArmor(player).getName()));
+        ArrayList<Component> actualArmorLore = new ArrayList<>();
+
+        actualArmorLore.add(Component.text("Armure").color(TextColor.color(30, 110, 240))
+                .append(Component.text(" » ").color(NamedTextColor.GRAY))
+                .append(PlayerUtils.getPlayerArmor(player).getName().color(NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
+
+        actualArmorLore.add(Component.text(""));
+
+        actualArmorLore.add(Component.text("Damage Resistance » +" + PlayerUtils.getPlayerArmor(player).getHeartAbsorption()).color(NamedTextColor.DARK_GRAY)
+                .decoration(TextDecoration.ITALIC, false));
+
+        actualArmorMeta.lore(actualArmorLore);
         actualArmor.setItemMeta(actualArmorMeta);
 
         inventory.setItem(39, actualArmor);
@@ -66,16 +75,49 @@ public enum InventoriesList {
 
         ItemStack buyArmor = ItemList.BUY_OBJECT.getItem();
         ItemMeta buyArmorMeta = buyArmor.getItemMeta();
-        buyArmorMeta.lore(Arrays.asList(PlayerUtils.getPlayerFutureArmor(player).getName(),
-                Component.text("Prix: " + PlayerUtils.getPlayerFutureArmor(player).getPrice()).color(TextColor.color(230, 200, 50))
-                        .decoration(TextDecoration.ITALIC, false)));
+        ArrayList<Component> buyArmorLore = new ArrayList<>();
+
+        buyArmorLore.add(Component.text("Armure").color(TextColor.color(30, 110, 240))
+                        .append(Component.text(" » ").color(NamedTextColor.GRAY))
+                        .append(PlayerUtils.getPlayerFutureArmor(player).getName().color(NamedTextColor.WHITE)).decoration(TextDecoration.ITALIC, false));
+
+        buyArmorLore.add(Component.text("Prix").color(TextColor.color(255, 255, 50))
+                        .append(Component.text(" » ").color(NamedTextColor.GRAY))
+                        .append(Component.text(PlayerUtils.getPlayerFutureArmor(player).getPrice() + " Gold").color(TextColor.color(255, 255, 50)))
+                        .decoration(TextDecoration.ITALIC, false));
+
+        if (PlayerUtils.getPlayerFutureArmor(player).getMinWave() != 0) {
+            buyArmorLore.add(Component.text("Vague Minimum").color(TextColor.color(255, 110, 60))
+                    .append(Component.text(" » ").color(NamedTextColor.GRAY))
+                    .append(Component.text(PlayerUtils.getPlayerFutureArmor(player).getMinWave()).color(TextColor.color(255, 60, 60)))
+                    .decoration(TextDecoration.ITALIC, false));
+        }
+
+        buyArmorLore.add(Component.text(""));
+
+        buyArmorLore.add(Component.text("Damage Resistance").color(TextColor.color(235, 35, 35))
+                .append(Component.text(" » ").color(NamedTextColor.GRAY))
+                .append(Component.text("+" + PlayerUtils.getPlayerFutureArmor(player).getHeartAbsorption()).color(TextColor.color(255, 60, 60)))
+                .decoration(TextDecoration.ITALIC, false));
+
+        buyArmorLore.add(Component.text(""));
+
+        if(PlayerUtils.getPlayerFutureArmor(player).getPrice() - PlayerUtils.getCoins(player) > 0) {
+            buyArmorLore.add(Component.text("» ").color(TextColor.color(NamedTextColor.GRAY))
+                    .append(Component.text("Pas assez de Gold!").color(TextColor.color(210, 10, 10))).decoration(TextDecoration.ITALIC, false));
+        } else {
+            buyArmorLore.add(Component.text("» ").color(TextColor.color(NamedTextColor.GRAY))
+                    .append(Component.text("Cliquez pour acheter").color(TextColor.color(80, 200, 40))).decoration(TextDecoration.ITALIC, false));
+        }
+
+        buyArmorMeta.lore(buyArmorLore);
         buyArmor.setItemMeta(buyArmorMeta);
 
         inventory.setItem(41, buyArmor);
         return inventory;
     })),
     SWORD_GUI(player -> {
-        Inventory inventory = Bukkit.createInventory(null, 27, Component.text("Épées"));
+        Inventory inventory = Bukkit.createInventory(null, 27, Component.text("Shop > Épées"));
 
         for (int slot = 0; slot < inventory.getSize(); slot++) {
             inventory.setItem(slot, ItemList.INVENTORY_FILLER.getItem());
@@ -92,12 +134,40 @@ public enum InventoriesList {
             ArrayList<Component> lore = new ArrayList<>();
 
             if(PlayerUtils.getPlayerFutureSword(player).getSwordLevel() == swords.getSwordLevel()) {
-                lore.add(Component.text("Cliquez pour acheter"));
+                lore.add(Component.text("Prix").color(TextColor.color(255, 255, 50))
+                        .append(Component.text(" » ").color(NamedTextColor.GRAY))
+                        .append(Component.text(PlayerUtils.getPlayerFutureSword(player).getPrice() + " Gold").color(TextColor.color(255, 255, 50)))
+                        .decoration(TextDecoration.ITALIC, false));
+
+                lore.add(Component.text(""));
+
+                lore.add(Component.text("Damage").color(TextColor.color(235, 35, 35))
+                        .append(Component.text(" » ").color(NamedTextColor.GRAY))
+                        .append(Component.text("+" + PlayerUtils.getPlayerFutureSword(player).getDamage()).color(TextColor.color(255, 60, 60)))
+                        .decoration(TextDecoration.ITALIC, false));
+
+                lore.add(Component.text(""));
+
+                if(PlayerUtils.getPlayerFutureSword(player).getPrice() - PlayerUtils.getCoins(player) > 0) {
+                    lore.add(Component.text("» ").color(TextColor.color(NamedTextColor.GRAY))
+                            .append(Component.text("Pas assez de Gold!").color(TextColor.color(210, 10, 10))).decoration(TextDecoration.ITALIC, false));
+                } else {
+                    lore.add(Component.text("» ").color(TextColor.color(NamedTextColor.GRAY))
+                            .append(Component.text("Cliquez pour acheter").color(TextColor.color(80, 200, 40))).decoration(TextDecoration.ITALIC, false));
+                }
+
             } else if(PlayerUtils.getPlayerSword(player).getSwordLevel() >= swords.getSwordLevel()) {
-                lore.add(Component.text("Épée déjà achetée"));
+
+                    lore.add(Component.text("Damage » +" + swords.getDamage()).color(NamedTextColor.DARK_GRAY)
+                            .decoration(TextDecoration.ITALIC, false));
+
+
+                lore.add(Component.text("» ").color(TextColor.color(NamedTextColor.GRAY))
+                        .append(Component.text("Achetée").color(TextColor.color(80, 200, 40))).decoration(TextDecoration.ITALIC,false));
             } else {
-                lore.add(Component.text("Débloquez l'").append(SwordList.getSwordFromLevel(swords.getSwordLevel() - 1).getName())
-                        .append(Component.text(" avant.")));
+                lore.add(Component.text("» ").color(TextColor.color(NamedTextColor.GRAY))
+                        .append(Component.text("Achetez l'").append(SwordList.getSwordFromLevel(swords.getSwordLevel() - 1).getName()).color(TextColor.color(210, 10, 10)))
+                        .decoration(TextDecoration.ITALIC, false));
             }
 
             swordItemMeta.lore(lore);
