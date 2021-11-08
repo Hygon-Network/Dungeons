@@ -1,5 +1,6 @@
 package fr.hygon.dungeons.utils;
 
+import fr.hygon.dungeons.Main;
 import fr.hygon.dungeons.shop.ArmorList;
 import fr.hygon.dungeons.shop.SwordList;
 import fr.hygon.dungeons.waves.WaveManager;
@@ -10,7 +11,9 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 
@@ -107,5 +110,16 @@ public class PlayerUtils implements Listener {
 
     public static SwordList getPlayerFutureSword(Player player) {
         return SwordList.getSwordFromLevel(swordLevel.getOrDefault(player, 1) + 1);
+    }
+
+    @EventHandler
+    public void onFoodConsume(PlayerItemConsumeEvent event) {
+         Player player = event.getPlayer();
+         new BukkitRunnable() {
+             @Override
+             public void run() {
+                 player.setSaturation(20);
+             }
+         }.runTaskLater(Main.getPlugin(), 1);
     }
 }
