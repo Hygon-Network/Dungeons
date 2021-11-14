@@ -7,8 +7,11 @@ public class WaveList {
     private static final HashMap<Integer, Wave> waves = new HashMap<>();
 
     public static void initWaves() {
-        waves.put(1, new Wave(5));
-        waves.put(2, new Wave(12));
+        waves.put(1, new Wave(10));
+        waves.put(2, new Wave(15));
+        waves.put(3, new Wave(20));
+        waves.put(4, new Wave(25));
+        waves.put(5, new Wave(27));
 
         for(Map.Entry<Integer, Wave> waveEntry : waves.entrySet()) {
             waveEntry.getValue().setWaveIdAndUpdateZombies(waveEntry.getKey());

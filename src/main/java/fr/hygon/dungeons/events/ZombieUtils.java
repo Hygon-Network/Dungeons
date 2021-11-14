@@ -48,7 +48,8 @@ public class ZombieUtils implements Listener {
         } else if(event.getEntity() instanceof Player player) {
             double oldDamage = event.getDamage();
             event.setDamage(0);
-            event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, oldDamage - PlayerUtils.getPlayerArmor(player).getHeartAbsorption());
+            event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, oldDamage - PlayerUtils.getPlayerArmor(player).getHeartAbsorption() <= 0 ?
+                    1 : oldDamage - PlayerUtils.getPlayerArmor(player).getHeartAbsorption());
         }
     }
 

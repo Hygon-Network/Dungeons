@@ -169,6 +169,26 @@ public enum ItemList {
         buyObject.setItemMeta(buyObjectMeta);
 
         return buyObject;
+    }),
+    TNT(() -> {
+        ItemStack tnt = new ItemStack(Material.PLAYER_HEAD, 1);
+        SkullMeta tntMeta = (SkullMeta) tnt.getItemMeta();
+
+        tntMeta.setBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUv" +
+                "M2FmNTk3NzZmMmYwMzQxMmM3YjU5NDdhNjNhMGNmMjgzZDUxZmU2NWFjNmRmN2YyZjg4MmUwODM0NDU2NWU5In19fQ==");
+        tnt.setItemMeta(tntMeta);
+
+        return tnt;
+    }),
+    WHITE_HEAD(() -> {
+        ItemStack whiteHead = new ItemStack(Material.PLAYER_HEAD, 1);
+        SkullMeta whiteHeadMeta = (SkullMeta) whiteHead.getItemMeta();
+
+        whiteHeadMeta.setBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY" +
+                "jNjZDNjMTI1N2FkYzAxMGQ2OTMyNjBiMzUxY2Q5NzgxYjk4ZWZiOTgyNmMzNmU0MWI5ZDhjYjU3MDZhODkifX19");
+        whiteHead.setItemMeta(whiteHeadMeta);
+
+        return whiteHead;
     });
 
 

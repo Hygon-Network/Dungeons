@@ -6,11 +6,15 @@ import net.kyori.adventure.text.format.TextColor;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Zombie;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
-
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import java.text.DecimalFormat;
-import java.util.Objects;
 
 public class CustomZombie extends Zombie {
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
@@ -63,5 +67,25 @@ public class CustomZombie extends Zombie {
 
     public void dropSpecialItem() {
 
+    }
+
+    public ItemStack getDyedLeather(Material material, Color color) {
+        ItemStack leatherPiece = new ItemStack(material, 1);
+        LeatherArmorMeta leatherPieceMeta = (LeatherArmorMeta) leatherPiece.getItemMeta();
+
+        leatherPieceMeta.setColor(color);
+        leatherPiece.setItemMeta(leatherPieceMeta);
+
+        return leatherPiece;
+    }
+
+    public ItemStack getItemWithEnchantedEffect(Material material) {
+        ItemStack enchantedItem = new ItemStack(material, 1);
+        ItemMeta enchantedItemMeta = enchantedItem.getItemMeta();
+
+        enchantedItemMeta.addEnchant(Enchantment.ARROW_INFINITE, 1, false);
+        enchantedItem.setItemMeta(enchantedItemMeta);
+
+        return enchantedItem;
     }
 }

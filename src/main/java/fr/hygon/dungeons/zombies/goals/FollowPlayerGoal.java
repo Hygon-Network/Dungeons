@@ -1,27 +1,23 @@
-package fr.hygon.dungeons.zombies;
+package fr.hygon.dungeons.zombies.goals;
 
-import net.minecraft.world.damagesource.DamageSource;
+import fr.hygon.dungeons.zombies.CustomZombie;
 import net.minecraft.world.entity.ai.goal.Goal;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-public class ClassicZombieGoal extends Goal {
-    private final CustomZombie zombie;
-    private final double speed;
-    private final double reach;
-    private final float damage;
+public class FollowPlayerGoal extends Goal {
+    public final CustomZombie zombie;
+    public final double speed;
+    public final double stopPoint;
 
-    private Player followedPlayer = null;
+    public Player followedPlayer = null;
     private int ticksSinceLastSearch = 7 * 20;
 
-    private int ticksSinceLastDamage = 0;
-
-    public ClassicZombieGoal(CustomZombie zombie, double speed, double reach, float damage) {
+    public FollowPlayerGoal(CustomZombie zombie, double speed, double stopPoint) {
         this.zombie = zombie;
         this.speed = speed;
-        this.reach = reach;
-        this.damage = damage;
+        this.stopPoint = stopPoint;
     }
 
     @Override
@@ -40,23 +36,10 @@ public class ClassicZombieGoal extends Goal {
 
     @Override
     public void tick() {
-        zombie.getNavigation().moveTo(((CraftPlayer) followedPlayer).getHandle(), speed);
-
-        if(zombie.getBukkitEntity().getLocation().distance(followedPlayer.getLocation()) <= reach) {
-            ticksSinceLastDamage++;
-            if(ticksSinceLastDamage <= 15) {
-                zombie.setAggressive(false);
-            } else if(ticksSinceLastDamage <= 20) {
-                if(ticksSinceLastDamage == 16) {
-                    ((CraftPlayer) followedPlayer).getHandle().hurt(DamageSource.mobAttack(zombie), damage);
-                }
-                zombie.setAggressive(true);
-            } else {
-                zombie.setAggressive(false);
-                ticksSinceLastDamage = 0;
-            }
+        if(zombie.getBukkitEntity().getLocation().distance(followedPlayer.getLocation()) > stopPoint) {
+            zombie.getNavigation().moveTo(((CraftPlayer) followedPlayer).getHandle(), speed);
         } else {
-            zombie.setAggressive(false);
+            zombie.getNavigation().stop();
         }
     }
 
