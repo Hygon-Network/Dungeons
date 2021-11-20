@@ -76,6 +76,31 @@ public class WaveZombieProvider {
         return zombies;
     };
 
+    private static final ZombieProvider wave6 = zombiesAmount -> {
+        ArrayList<Class<? extends CustomZombie>> zombies = new ArrayList<>();
+
+        zombiesAmount -= 4;
+        zombies.add(SpeedyZombie.class);
+        zombies.add(SpeedyZombie.class);
+        zombies.add(BombyZombie.class);
+        zombies.add(BombyZombie.class);
+
+        for (int i = 0; i < zombiesAmount; i++) {
+            int percentage = getPercentage();
+
+            if(percentage <= 5) {
+                zombies.add(ZombieI.class);
+            } else {
+                switch (GameManager.getGameDifficulty()) {
+                    case NORMAL -> zombies.add(percentage <= 40 ? ZombieII.class : ZombieIII.class);
+                    case HARD, INSANE -> zombies.add(percentage <= 30 ? ZombieII.class : ZombieIII.class);
+                }
+            }
+        }
+
+        return zombies;
+    };
+
     private static int getPercentage() {
         return ThreadLocalRandom.current().nextInt(0, 100);
     }
@@ -89,6 +114,7 @@ public class WaveZombieProvider {
         waveZombieProvider.put(3, wave3);
         waveZombieProvider.put(4, wave4);
         waveZombieProvider.put(5, wave5);
+        waveZombieProvider.put(6, wave6);
     }
 
     public static List<Class<? extends CustomZombie>> getZombiesForWave(Wave wave) {

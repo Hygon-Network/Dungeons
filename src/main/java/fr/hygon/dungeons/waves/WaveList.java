@@ -12,6 +12,7 @@ public class WaveList {
         waves.put(3, new Wave(20));
         waves.put(4, new Wave(25));
         waves.put(5, new Wave(27));
+        waves.put(6, new Wave(30));
 
         for(Map.Entry<Integer, Wave> waveEntry : waves.entrySet()) {
             waveEntry.getValue().setWaveIdAndUpdateZombies(waveEntry.getKey());
