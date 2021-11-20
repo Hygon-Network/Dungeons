@@ -16,59 +16,59 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class WaveZombieProvider {
     private static final ZombieProvider wave1 = zombiesAmount -> {
-        ArrayList<CustomZombie> zombies = new ArrayList<>();
+        ArrayList<Class<? extends CustomZombie>> zombies = new ArrayList<>();
         for (int i = 0; i < zombiesAmount; i++) {
-            zombies.add(new ZombieI());
+            zombies.add(ZombieI.class);
         }
         return zombies;
     };
 
     private static final ZombieProvider wave2 = zombiesAmount -> {
-        ArrayList<CustomZombie> zombies = new ArrayList<>();
+        ArrayList<Class<? extends CustomZombie>> zombies = new ArrayList<>();
         for (int i = 0; i < zombiesAmount; i++) {
-            zombies.add(getPercentage() <= 90 ? new ZombieII() : new ZombieI());
+            zombies.add(getPercentage() <= 90 ? ZombieII.class : ZombieI.class);
         }
         return zombies;
     };
 
     private static final ZombieProvider wave3 = zombiesAmount -> {
-        ArrayList<CustomZombie> zombies = new ArrayList<>();
+        ArrayList<Class<? extends CustomZombie>> zombies = new ArrayList<>();
         for (int i = 0; i < zombiesAmount; i++) {
             switch (GameManager.getGameDifficulty()) {
-                case NORMAL -> zombies.add(getPercentage() <= 60 ? new ZombieI() : new ZombieII());
-                case HARD -> zombies.add(getPercentage() <= 50 ? new ZombieI() : new ZombieII());
-                case INSANE -> zombies.add(getPercentage() <= 45 ? new ZombieI() : new ZombieII());
+                case NORMAL -> zombies.add(getPercentage() <= 60 ? ZombieI.class : ZombieII.class);
+                case HARD -> zombies.add(getPercentage() <= 50 ? ZombieI.class : ZombieII.class);
+                case INSANE -> zombies.add(getPercentage() <= 45 ? ZombieI.class : ZombieII.class);
             }
-            zombies.add(ThreadLocalRandom.current().nextInt(0, 100) <= 90 ? new ZombieII() : new ZombieI());
+            zombies.add(ThreadLocalRandom.current().nextInt(0, 100) <= 90 ? ZombieII.class : ZombieI.class);
         }
         return zombies;
     };
 
     private static final ZombieProvider wave4 = zombiesAmount -> {
-        ArrayList<CustomZombie> zombies = new ArrayList<>();
+        ArrayList<Class<? extends CustomZombie>> zombies = new ArrayList<>();
         for (int i = 0; i < zombiesAmount; i++) {
-            zombies.add(getPercentage() <= 25 ? new ZombieI() : new ZombieII());
+            zombies.add(getPercentage() <= 25 ? ZombieI.class : ZombieII.class);
         }
         return zombies;
     };
 
     private static final ZombieProvider wave5 = zombiesAmount -> {
-        ArrayList<CustomZombie> zombies = new ArrayList<>();
+        ArrayList<Class<? extends CustomZombie>> zombies = new ArrayList<>();
 
         zombiesAmount -= 2;
-        zombies.add(new SpeedyZombie());
-        zombies.add(new BombyZombie());
+        zombies.add(SpeedyZombie.class);
+        zombies.add(BombyZombie.class);
 
         for (int i = 0; i < zombiesAmount; i++) {
             int percentage = getPercentage();
 
             if(percentage <= 10) {
-                zombies.add(new ZombieI());
+                zombies.add(ZombieI.class);
             } else {
                switch (GameManager.getGameDifficulty()) {
-                    case NORMAL -> zombies.add(percentage <= 60 ? new ZombieII() : new ZombieIII());
-                    case HARD -> zombies.add(percentage <= 50 ? new ZombieII() : new ZombieIII());
-                    case INSANE -> zombies.add(percentage <= 40 ? new ZombieII() : new ZombieIII());
+                    case NORMAL -> zombies.add(percentage <= 60 ? ZombieII.class : ZombieIII.class);
+                    case HARD -> zombies.add(percentage <= 50 ? ZombieII.class : ZombieIII.class);
+                    case INSANE -> zombies.add(percentage <= 40 ? ZombieII.class : ZombieIII.class);
                 }
             }
         }
@@ -91,14 +91,14 @@ public class WaveZombieProvider {
         waveZombieProvider.put(5, wave5);
     }
 
-    public static List<CustomZombie> getZombiesForWave(Wave wave) {
-        List<CustomZombie> zombies = waveZombieProvider.get(wave.getWaveId()).getZombies(wave.getMaxZombies());
+    public static List<Class<? extends CustomZombie>> getZombiesForWave(Wave wave) {
+        List<Class<? extends CustomZombie>> zombies = waveZombieProvider.get(wave.getWaveId()).getZombies(wave.getMaxZombies());
         Collections.shuffle(zombies);
 
         return zombies;
     }
 
     public interface ZombieProvider {
-        List<CustomZombie> getZombies(int zombiesAmount);
+        List<Class<? extends CustomZombie>> getZombies(int zombiesAmount);
     }
 }

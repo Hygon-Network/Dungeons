@@ -5,6 +5,7 @@ import fr.hygon.dungeons.game.GameManager;
 import fr.hygon.dungeons.game.GameStatus;
 import fr.hygon.dungeons.utils.ItemList;
 import fr.hygon.dungeons.zombies.CustomZombie;
+import fr.hygon.dungeons.zombies.classic.ZombieI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -56,6 +57,7 @@ public class WaveManager implements Listener {
                         timer--;
                         if(timer == 0) {
                             CustomZombie customZombie = wave.getZombie();
+                            if(customZombie == null) customZombie = new ZombieI(); // If the server can't create a zombie, instead of doing nothing we spawn a level I zombie.
                             nmsWorld.addEntity(customZombie, CreatureSpawnEvent.SpawnReason.CUSTOM);
                             aliveZombies++;
                             timer = 3;

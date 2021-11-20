@@ -1,10 +1,12 @@
 package fr.hygon.dungeons;
 
+import fr.hygon.dungeons.events.DoorsManager;
 import fr.hygon.dungeons.events.SwordDamage;
 import fr.hygon.dungeons.events.ZombieUtils;
 import fr.hygon.dungeons.events.gui.DifficultySelectorGUI;
 import fr.hygon.dungeons.events.PlayerJoinLeaveEvent;
 import fr.hygon.dungeons.events.gui.ShopGUI;
+import fr.hygon.dungeons.game.Doors;
 import fr.hygon.dungeons.game.GameManager;
 import fr.hygon.dungeons.utils.PlayerUtils;
 import fr.hygon.dungeons.waves.WaveManager;
@@ -17,7 +19,9 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
+
         registerEvents();
+        Doors.initArmorStands();
         startTasks();
     }
 
@@ -32,6 +36,7 @@ public class Main extends JavaPlugin {
        getServer().getPluginManager().registerEvents(new WaveManager(), this);
        getServer().getPluginManager().registerEvents(new ZombieUtils(), this);
        getServer().getPluginManager().registerEvents(new SwordDamage(), this);
+       getServer().getPluginManager().registerEvents(new DoorsManager(), this);
 
        /* GUIs */
         getServer().getPluginManager().registerEvents(new DifficultySelectorGUI(), this);

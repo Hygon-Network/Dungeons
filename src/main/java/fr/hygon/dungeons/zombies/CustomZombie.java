@@ -1,5 +1,6 @@
 package fr.hygon.dungeons.zombies;
 
+import fr.hygon.dungeons.game.Doors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -7,6 +8,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Zombie;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
@@ -16,7 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import java.text.DecimalFormat;
 
-public class CustomZombie extends Zombie {
+public abstract class CustomZombie extends Zombie {
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
 
     private final float regeneration;
@@ -36,8 +38,8 @@ public class CustomZombie extends Zombie {
         this.coins = coins;
         this.name = name;
 
-        // TODO set position
-        setPos(0.5, 6, 1.5);
+        Location pos = Doors.getRandomOpenedDoor().getRandomSpawnLocation();
+        setPos(pos.getX(), pos.getY(), pos.getZ());
         setCustomNameVisible(true);
         getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
         setHealth(health);
