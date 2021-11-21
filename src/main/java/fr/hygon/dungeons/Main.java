@@ -6,6 +6,7 @@ import fr.hygon.dungeons.events.ZombieUtils;
 import fr.hygon.dungeons.events.gui.DifficultySelectorGUI;
 import fr.hygon.dungeons.events.PlayerJoinLeaveEvent;
 import fr.hygon.dungeons.events.gui.ShopGUI;
+import fr.hygon.dungeons.game.DeathManager;
 import fr.hygon.dungeons.game.Doors;
 import fr.hygon.dungeons.game.GameManager;
 import fr.hygon.dungeons.utils.PlayerUtils;
@@ -37,6 +38,7 @@ public class Main extends JavaPlugin {
        getServer().getPluginManager().registerEvents(new ZombieUtils(), this);
        getServer().getPluginManager().registerEvents(new SwordDamage(), this);
        getServer().getPluginManager().registerEvents(new DoorsManager(), this);
+       getServer().getPluginManager().registerEvents(new DeathManager(), this);
 
        /* GUIs */
         getServer().getPluginManager().registerEvents(new DifficultySelectorGUI(), this);
@@ -52,6 +54,7 @@ public class Main extends JavaPlugin {
         GameManager.stopTask();
         WaveManager.stopTask();
         SwordDamage.stopTask();
+        DeathManager.stopTask();
     }
 
     public static Plugin getPlugin() {

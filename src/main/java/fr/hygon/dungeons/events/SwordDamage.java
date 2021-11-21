@@ -1,6 +1,7 @@
 package fr.hygon.dungeons.events;
 
 import fr.hygon.dungeons.Main;
+import fr.hygon.dungeons.game.DeathManager;
 import fr.hygon.dungeons.game.GameManager;
 import fr.hygon.dungeons.utils.Difficulty;
 import fr.hygon.dungeons.utils.PlayerUtils;
@@ -63,11 +64,16 @@ public class SwordDamage implements Listener {
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
         if(!(event.getDamager() instanceof Player player)) return;
-        ItemStack item = player.getInventory().getItemInMainHand();
-        if(item.getType() != PlayerUtils.getPlayerSword(player).getSwordProvider().getSword().getType() || item.getItemMeta() == null) return;
+        if(!DeathManager.isDead(player)) {
+            ItemStack item = player.getInventory().getItemInMainHand();
+            if (item.getType() != PlayerUtils.getPlayerSword(player).getSwordProvider().getSword().getType() || item.getItemMeta() == null)
+                return;
 
-        incrementPlayerHit(player);
-        updateItemDamage(player, item);
+            incrementPlayerHit(player);
+            updateItemDamage(player, item);
+        } else {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler

@@ -1,6 +1,7 @@
 package fr.hygon.dungeons.waves;
 
 import fr.hygon.dungeons.Main;
+import fr.hygon.dungeons.game.DeathManager;
 import fr.hygon.dungeons.game.GameManager;
 import fr.hygon.dungeons.game.GameStatus;
 import fr.hygon.dungeons.utils.ItemList;
@@ -45,6 +46,7 @@ public class WaveManager implements Listener {
             public void run() {
                 if(GameManager.getGameStatus() == GameStatus.PLAYING) {
                     if(!wave.hasZombiesLeft() && aliveZombies == 0) {
+                        DeathManager.respawnAllPlayers();
                         GameManager.setGameStatus(GameStatus.PAUSE_TIME);
                         waveId++;
                         if(waveId == 26) {

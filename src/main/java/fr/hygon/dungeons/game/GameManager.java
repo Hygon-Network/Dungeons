@@ -130,6 +130,7 @@ public class GameManager {
         }
 
         WaveManager.startTask();
+        DeathManager.startTask();
     }
 
     public static GameStatus getGameStatus() {

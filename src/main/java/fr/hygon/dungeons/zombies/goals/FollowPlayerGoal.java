@@ -1,5 +1,6 @@
 package fr.hygon.dungeons.zombies.goals;
 
+import fr.hygon.dungeons.game.DeathManager;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import org.bukkit.Bukkit;
@@ -23,7 +24,7 @@ public class FollowPlayerGoal extends Goal {
     @Override
     public boolean canUse() {
         ticksSinceLastSearch++;
-        if(followedPlayer == null) {
+        if(followedPlayer == null || DeathManager.isDead(followedPlayer)) {
             updateFollowedPlayer();
             ticksSinceLastSearch = 0;
         } else if (ticksSinceLastSearch == 7 * 20) {
@@ -48,6 +49,7 @@ public class FollowPlayerGoal extends Goal {
         double shortestDistance = Double.MAX_VALUE;
 
         for(Player players : Bukkit.getOnlinePlayers()) {
+            if(DeathManager.isDead(players)) continue;
             if(mob.getBukkitEntity().getLocation().distance(players.getLocation()) < shortestDistance) {
                 shortestDistance = mob.getBukkitEntity().getLocation().distance(players.getLocation());
                 shortestDistancePlayer = players;

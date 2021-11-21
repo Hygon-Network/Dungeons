@@ -1,5 +1,6 @@
 package fr.hygon.dungeons.zombies.specials;
 
+import fr.hygon.dungeons.game.DeathManager;
 import fr.hygon.dungeons.zombies.CustomZombie;
 import fr.hygon.dungeons.zombies.items.Bomb;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -59,7 +60,7 @@ public class BombyZombie extends CustomZombie {
         @Override
         public boolean canUse() {
             ticksSinceLastSearch++;
-            if(attackedPlayer == null) {
+            if(attackedPlayer == null || DeathManager.isDead(attackedPlayer)) {
                 updateFollowedPlayer();
                 ticksSinceLastSearch = 0;
             } else if (ticksSinceLastSearch == 7 * 20) {
@@ -124,6 +125,7 @@ public class BombyZombie extends CustomZombie {
             double shortestDistance = Double.MAX_VALUE;
 
             for(Player players : Bukkit.getOnlinePlayers()) {
+                if(DeathManager.isDead(players)) continue;
                 if(bombyZombie.getBukkitEntity().getLocation().distance(players.getLocation()) < shortestDistance) {
                     shortestDistance = bombyZombie.getBukkitEntity().getLocation().distance(players.getLocation());
                     shortestDistancePlayer = players;

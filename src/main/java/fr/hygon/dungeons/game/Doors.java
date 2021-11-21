@@ -3,6 +3,7 @@ package fr.hygon.dungeons.game;
 import fr.hygon.dungeons.Main;
 import fr.hygon.dungeons.utils.PlayerUtils;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import org.bukkit.Bukkit;
@@ -76,7 +77,7 @@ public class Doors {
     public void openDoor(Player player) {
         if(isOpened) return;
         if(PlayerUtils.getCoins(player) < getPrice()) {
-            player.sendMessage(Component.text("Vous n'avez pas assez d'argent.")); //TODO
+            player.sendMessage(Component.text("Vous n'avez pas assez d'argent.").color(TextColor.color(180, 20, 20)));
             return;
         }
         
@@ -179,7 +180,7 @@ public class Doors {
 
     public enum DoorsList {
         GARDEN(new Doors(
-            Component.text("Garden"), // TODO
+            Component.text("Garden").color(TextColor.color(0, 200, 0)),
             new Location(world, 0, 0, 0),
             new Location(world, 0, 0, 0),
             0,
@@ -197,7 +198,7 @@ public class Doors {
             new Location(world, 0, 0, 0)
         )),
         YARD(new Doors(
-           Component.text("Cour"), // TODO
+           Component.text("Yard").color(TextColor.color(75, 75, 90)),
             new Location(world, 16, 9, 12),
             new Location(world, 16, 6, 14),
             100,
@@ -220,7 +221,7 @@ public class Doors {
             new Location(world, 17, 6, 13)
         )),
         CRYPTS(new Doors(
-            Component.text("Crypts"), // TODO
+            Component.text("Crypts").color(TextColor.color(130, 130, 140)),
             new Location(world, 24, 6, 4),
             new Location(world, 24, 8, 6),
             100,
