@@ -131,6 +131,67 @@ public class WaveZombieProvider {
         return zombies;
     };
 
+    private static final ZombieProvider wave8 = zombiesAmount -> {
+        ArrayList<Class<? extends CustomZombie>> zombies = new ArrayList<>();
+
+        zombiesAmount -= 8;
+        zombies.add(SpeedyZombie.class);
+        zombies.add(SpeedyZombie.class);
+        zombies.add(SpeedyZombie.class);
+        zombies.add(BombyZombie.class);
+        zombies.add(BombyZombie.class);
+        zombies.add(BombyZombie.class);
+        zombies.add(WolfZombie.class);
+        zombies.add(WolfZombie.class);
+
+        for (int i = 0; i < zombiesAmount; i++) {
+            int percentage = getPercentage();
+
+            if(percentage <= 10) {
+                zombies.add(ZombieII.class);
+            } else if(percentage <= 60) {
+                zombies.add(ZombieIII.class);
+            } else {
+                zombies.add(ZombieIV.class);
+            }
+        }
+
+        return zombies;
+    };
+
+    private static final ZombieProvider wave9 = zombiesAmount -> {
+        ArrayList<Class<? extends CustomZombie>> zombies = new ArrayList<>();
+
+        zombiesAmount -= 11;
+        zombies.add(SpeedyZombie.class);
+        zombies.add(SpeedyZombie.class);
+        zombies.add(SpeedyZombie.class);
+        zombies.add(SpeedyZombie.class);
+
+        zombies.add(BombyZombie.class);
+        zombies.add(BombyZombie.class);
+        zombies.add(BombyZombie.class);
+        zombies.add(BombyZombie.class);
+
+        zombies.add(WolfZombie.class);
+        zombies.add(WolfZombie.class);
+        zombies.add(WolfZombie.class);
+
+        for (int i = 0; i < zombiesAmount; i++) {
+            int percentage = getPercentage();
+
+            if(percentage <= 10) {
+                zombies.add(ZombieII.class);
+            } else if(percentage <= 40) {
+                zombies.add(ZombieIII.class);
+            } else {
+                zombies.add(ZombieIV.class);
+            }
+        }
+
+        return zombies;
+    };
+
     private static int getPercentage() {
         return ThreadLocalRandom.current().nextInt(0, 100);
     }
@@ -146,6 +207,7 @@ public class WaveZombieProvider {
         waveZombieProvider.put(5, wave5);
         waveZombieProvider.put(6, wave6);
         waveZombieProvider.put(7, wave7);
+        waveZombieProvider.put(8, wave8);
     }
 
     public static List<Class<? extends CustomZombie>> getZombiesForWave(Wave wave) {
