@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
+import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -148,9 +149,13 @@ public class WaveManager implements Listener {
         return waveId;
     }
 
+    public static void incrementAliveZombie() {
+        aliveZombies++;
+    }
+
     @EventHandler
     public void onDeath(EntityDeathEvent event) {
-        if(event.getEntity() instanceof Zombie) {
+        if(event.getEntity() instanceof Zombie || event.getEntity() instanceof Wolf) {
             aliveZombies--;
         }
     }

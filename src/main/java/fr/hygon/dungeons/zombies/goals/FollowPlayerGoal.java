@@ -1,21 +1,21 @@
 package fr.hygon.dungeons.zombies.goals;
 
-import fr.hygon.dungeons.zombies.CustomZombie;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class FollowPlayerGoal extends Goal {
-    public final CustomZombie zombie;
+    public final Mob mob;
     public final double speed;
     public final double stopPoint;
 
     public Player followedPlayer = null;
     private int ticksSinceLastSearch = 7 * 20;
 
-    public FollowPlayerGoal(CustomZombie zombie, double speed, double stopPoint) {
-        this.zombie = zombie;
+    public FollowPlayerGoal(Mob mob, double speed, double stopPoint) {
+        this.mob = mob;
         this.speed = speed;
         this.stopPoint = stopPoint;
     }
@@ -36,10 +36,10 @@ public class FollowPlayerGoal extends Goal {
 
     @Override
     public void tick() {
-        if(zombie.getBukkitEntity().getLocation().distance(followedPlayer.getLocation()) > stopPoint) {
-            zombie.getNavigation().moveTo(((CraftPlayer) followedPlayer).getHandle(), speed);
+        if(mob.getBukkitEntity().getLocation().distance(followedPlayer.getLocation()) > stopPoint) {
+            mob.getNavigation().moveTo(((CraftPlayer) followedPlayer).getHandle(), speed);
         } else {
-            zombie.getNavigation().stop();
+            mob.getNavigation().stop();
         }
     }
 
@@ -48,8 +48,8 @@ public class FollowPlayerGoal extends Goal {
         double shortestDistance = Double.MAX_VALUE;
 
         for(Player players : Bukkit.getOnlinePlayers()) {
-            if(zombie.getBukkitEntity().getLocation().distance(players.getLocation()) < shortestDistance) {
-                shortestDistance = zombie.getBukkitEntity().getLocation().distance(players.getLocation());
+            if(mob.getBukkitEntity().getLocation().distance(players.getLocation()) < shortestDistance) {
+                shortestDistance = mob.getBukkitEntity().getLocation().distance(players.getLocation());
                 shortestDistancePlayer = players;
             }
         }

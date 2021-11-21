@@ -5,8 +5,10 @@ import fr.hygon.dungeons.zombies.CustomZombie;
 import fr.hygon.dungeons.zombies.classic.ZombieI;
 import fr.hygon.dungeons.zombies.classic.ZombieII;
 import fr.hygon.dungeons.zombies.classic.ZombieIII;
+import fr.hygon.dungeons.zombies.classic.ZombieIV;
 import fr.hygon.dungeons.zombies.specials.BombyZombie;
 import fr.hygon.dungeons.zombies.specials.SpeedyZombie;
+import fr.hygon.dungeons.zombies.specials.WolfZombie.WolfZombie;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -101,6 +103,34 @@ public class WaveZombieProvider {
         return zombies;
     };
 
+    private static final ZombieProvider wave7 = zombiesAmount -> {
+        ArrayList<Class<? extends CustomZombie>> zombies = new ArrayList<>();
+
+        zombiesAmount -= 7;
+        zombies.add(SpeedyZombie.class);
+        zombies.add(SpeedyZombie.class);
+        zombies.add(SpeedyZombie.class);
+        zombies.add(BombyZombie.class);
+        zombies.add(BombyZombie.class);
+        zombies.add(WolfZombie.class);
+        zombies.add(WolfZombie.class);
+
+        for (int i = 0; i < zombiesAmount; i++) {
+            int percentage = getPercentage();
+
+            if(percentage <= 20) {
+                zombies.add(ZombieIV.class);
+            } else {
+                switch (GameManager.getGameDifficulty()) {
+                    case NORMAL -> zombies.add(percentage <= 45 ? ZombieII.class : ZombieIII.class);
+                    case HARD, INSANE -> zombies.add(percentage <= 35 ? ZombieII.class : ZombieIII.class);
+                }
+            }
+        }
+
+        return zombies;
+    };
+
     private static int getPercentage() {
         return ThreadLocalRandom.current().nextInt(0, 100);
     }
@@ -115,6 +145,7 @@ public class WaveZombieProvider {
         waveZombieProvider.put(4, wave4);
         waveZombieProvider.put(5, wave5);
         waveZombieProvider.put(6, wave6);
+        waveZombieProvider.put(7, wave7);
     }
 
     public static List<Class<? extends CustomZombie>> getZombiesForWave(Wave wave) {
