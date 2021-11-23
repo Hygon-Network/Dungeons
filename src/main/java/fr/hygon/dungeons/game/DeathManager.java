@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class DeathManager implements Listener {
     private static BukkitTask task;
@@ -79,7 +80,7 @@ public class DeathManager implements Listener {
     }
 
     public static void respawnAllPlayers() {
-        deadPlayers.keySet().forEach(DeathManager::respawnPlayer);
+        new HashSet<>(deadPlayers.keySet()).forEach(DeathManager::respawnPlayer);
     }
 
     public static void respawnPlayer(Player player) {
@@ -102,7 +103,7 @@ public class DeathManager implements Listener {
             @Override
             public void run() {
                 if(GameManager.getGameDifficulty() != Difficulty.INSANE) {
-                    for (Player players : deadPlayers.keySet()) {
+                    for (Player players : new HashSet<>(deadPlayers.keySet())) {
                         if (deadPlayers.get(players) == 0) {
                             respawnPlayer(players);
                         } else {
