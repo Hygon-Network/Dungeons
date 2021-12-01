@@ -26,6 +26,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import java.time.Duration;
+import java.util.ArrayList;
 
 public class WaveManager implements Listener {
     private static BukkitTask task;
@@ -37,6 +38,8 @@ public class WaveManager implements Listener {
     private static int aliveZombies = 0;
 
     private static final ServerLevel nmsWorld = ((CraftWorld) Bukkit.getWorld("world")).getHandle();
+
+    private static final ArrayList<Player> playersSkipping = new ArrayList<>();
 
     public static void startTask() {
         wave = WaveList.getWave(waveId);
@@ -102,43 +105,60 @@ public class WaveManager implements Listener {
                                 players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1.0F, 0F);
                             }
                         }
-                        case 0 -> {
-                            timer = 6;
-                            GameManager.setGameStatus(GameStatus.PLAYING);
-
-                            Bukkit.broadcast(Component.text("☠").color(TextColor.color(170, 0, 0))
-                                    .append(Component.text(" | ").color(TextColor.color(107, 107, 107)))
-                                    .append(Component.text("Vague" + waveId).color(TextColor.color(200, 20, 20))
-                                            .append(Component.text(" » ").color(TextColor.color(NamedTextColor.GRAY)))
-                                            .append(Component.text(wave.getMaxZombies() + " Zombies").color(TextColor.color(255, 255, 75)))));
-
-                            for(Player players : Bukkit.getOnlinePlayers()) {
-                                players.getInventory().setItem(8, ItemList.RADIO_OFF.getItem());
-                                switch (waveId) {
-                                    case 10, 20, 25 -> {
-                                        final Title.Times times = Title.Times.of(Duration.ofMillis(1000), Duration.ofMillis(5000), Duration.ofMillis(1000));
-                                        final Title title = Title.title(Component.text("☠ BOSS ☠").color(TextColor.color(200, 20, 20)), ((Component.text("VAGUE " + waveId).color(TextColor.color(240, 20, 20))
-                                                .decoration(TextDecoration.BOLD, true))), times);
-
-                                        players.showTitle(title);
-                                        players.playSound(players.getLocation(), Sound.ENTITY_WITHER_DEATH, 1.0F, 0F);
-                                    }
-                                    default -> {
-                                        final Title.Times times = Title.Times.of(Duration.ofMillis(1000), Duration.ofMillis(5000), Duration.ofMillis(1000));
-                                        final Title title = Title.title((Component.text("VAGUE " + waveId).color(TextColor.color(200, 20, 20))
-                                                .decoration(TextDecoration.BOLD, true)), (Component.text("")), times);
-
-                                        players.showTitle(title);
-                                        players.playSound(players.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1.0F, 0F);
-                                    }
-                                }
-                            }
-                        }
+                        case 0 -> nextWave();
                     }
                     timer--;
                 }
             }
         }.runTaskTimer(Main.getPlugin(), 0, 20);
+    }
+
+    private static void nextWave() {
+        playersSkipping.clear();
+
+        timer = 6;
+        GameManager.setGameStatus(GameStatus.PLAYING);
+
+        Bukkit.broadcast(Component.text("☠").color(TextColor.color(170, 0, 0))
+            .append(Component.text(" | ").color(TextColor.color(107, 107, 107)))
+            .append(Component.text("Vague" + waveId).color(TextColor.color(200, 20, 20))
+                .append(Component.text(" » ").color(TextColor.color(NamedTextColor.GRAY)))
+                .append(Component.text(wave.getMaxZombies() + " Zombies").color(TextColor.color(255, 255, 75)))));
+
+        for(Player players : Bukkit.getOnlinePlayers()) {
+            players.getInventory().setItem(8, ItemList.RADIO_OFF.getItem());
+            switch (waveId) {
+                case 10, 20, 25 -> {
+                    final Title.Times times = Title.Times.of(Duration.ofMillis(1000), Duration.ofMillis(5000), Duration.ofMillis(1000));
+                    final Title title = Title.title(Component.text("☠ BOSS ☠").color(TextColor.color(200, 20, 20)), ((Component.text("VAGUE " + waveId).color(TextColor.color(240, 20, 20))
+                        .decoration(TextDecoration.BOLD, true))), times);
+
+                    players.showTitle(title);
+                    players.playSound(players.getLocation(), Sound.ENTITY_WITHER_DEATH, 1.0F, 0F);
+                }
+                default -> {
+                    final Title.Times times = Title.Times.of(Duration.ofMillis(1000), Duration.ofMillis(5000), Duration.ofMillis(1000));
+                    final Title title = Title.title((Component.text("VAGUE " + waveId).color(TextColor.color(200, 20, 20))
+                        .decoration(TextDecoration.BOLD, true)), (Component.text("")), times);
+
+                    players.showTitle(title);
+                    players.playSound(players.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1.0F, 0F);
+                }
+            }
+        }
+    }
+
+    public static void registerSkippingPlayer(Player player) {
+        playersSkipping.add(player);
+        if(Bukkit.getOnlinePlayers().size() / 2 >= playersSkipping.size()) {
+            nextWave();
+        }
+
+        Bukkit.broadcast(player.displayName().append(Component.text(" veux passer à la prochaine vague."))); // TODO
+    }
+
+    public static int getPlayersSkippingAmount() {
+        return playersSkipping.size();
     }
 
     public static void stopTask() {

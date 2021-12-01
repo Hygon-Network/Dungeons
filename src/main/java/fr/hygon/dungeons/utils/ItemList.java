@@ -1,5 +1,6 @@
 package fr.hygon.dungeons.utils;
 
+import fr.hygon.dungeons.waves.WaveManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -10,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Supplier;
 
 public enum ItemList {
@@ -189,6 +191,17 @@ public enum ItemList {
         whiteHead.setItemMeta(whiteHeadMeta);
 
         return whiteHead;
+    }),
+    SKIP_WAVE(() -> {
+        ItemStack skipWave = new ItemStack(Material.PAPER, 1);
+        ItemMeta skipWaveMeta = skipWave.getItemMeta();
+
+        skipWaveMeta.displayName(Component.text("Passer la vague").color(TextColor.color(55, 180, 255)).decoration(TextDecoration.ITALIC, false));
+        skipWaveMeta.lore(List.of(Component.text(WaveManager.getPlayersSkippingAmount() + " ont voté.")
+            .color(TextColor.color(245, 60, 90)).decoration(TextDecoration.ITALIC, false)));
+        skipWave.setItemMeta(skipWaveMeta);
+
+        return skipWave;
     });
 
 

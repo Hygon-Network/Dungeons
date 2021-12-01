@@ -34,6 +34,7 @@ public enum InventoriesList {
 
         inventory.setItem(12, ItemList.SHOP_SWORD.getItem());
         inventory.setItem(14, ItemList.ARMOR_SHOP.getItem());
+        inventory.setItem(26, ItemList.SKIP_WAVE.getItem());
         return inventory;
     })),
     ARMOR_GUI((player -> {

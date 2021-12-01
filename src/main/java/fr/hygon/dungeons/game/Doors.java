@@ -13,6 +13,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
@@ -140,6 +141,14 @@ public class Doors {
     }
 
     public static void initArmorStands() {
+        for(Entity entities : world.getEntities()) {
+            if(entities instanceof ArmorStand armorStand) {
+                if(armorStand.getPersistentDataContainer().has(new NamespacedKey(Main.getPlugin(), "door"), PersistentDataType.STRING)) {
+                    armorStand.remove();
+                }
+            }
+        }
+
         for(DoorsList doors : DoorsList.values()) {
             if(doors == DoorsList.GARDEN) continue;
             doors.getDoor().armorStand1 = (ArmorStand) world.spawnEntity(doors.getDoor().armorStand1Loc, EntityType.ARMOR_STAND);

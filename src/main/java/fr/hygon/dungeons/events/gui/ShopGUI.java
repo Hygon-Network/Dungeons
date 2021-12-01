@@ -3,6 +3,7 @@ package fr.hygon.dungeons.events.gui;
 import fr.hygon.dungeons.utils.InventoriesList;
 import fr.hygon.dungeons.utils.ItemList;
 import fr.hygon.dungeons.utils.PlayerUtils;
+import fr.hygon.dungeons.waves.WaveManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -57,6 +58,9 @@ public class ShopGUI extends GUI implements Listener {
                     player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, 2, 1);
                 }
                 openInventory(player, InventoriesList.SWORD_GUI);
+            } else if(clickedItem.isSimilar(ItemList.SKIP_WAVE.getItem())) {
+                WaveManager.registerSkippingPlayer(player);
+                closeInventory(player);
             }
         } else if(getPlayerOpenInventoryType(player, event.getInventory()) == InventoriesList.ARMOR_GUI) {
             event.setCancelled(true);
