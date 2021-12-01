@@ -172,11 +172,12 @@ public class Doors {
             doors.getDoor().armorStand1.setCustomNameVisible(false);
             doors.getDoor().armorStand2.setCustomNameVisible(false);
 
-            if(doors == DoorsList.YARD) {
+            if(doors == DoorsList.YARD || doors == DoorsList.GARDEN_DUNGEON || doors == DoorsList.GARDEN_LABORATORY) {
                 doors.getDoor().setArmorStand1Name();
             } else {
                 doors.getDoor().hideArmorStandsName();
             }
+
 
             doors.getDoor().armorStand1.getPersistentDataContainer().set(new NamespacedKey(Main.getPlugin(), "door"), PersistentDataType.STRING, doors.toString());
         }
@@ -217,7 +218,7 @@ public class Doors {
                 new Location(world, 19, 6, 3),
                 new Location(world, 26, 7, 16),
                 new Location(world, 26, 13, 11),
-                new Location(world, 26, 7, 26)
+                new Location(world, 26, 13, 26)
             ),
             new Runnable() {
                 @Override
@@ -247,11 +248,250 @@ public class Doors {
                         } else {
                             YARD.getDoor().hideArmorStandsName();
                         }
+                        if(!PARKING.getDoor().isOpened()) {
+                            PARKING.getDoor().setArmorStand2Name();
+                        } else {
+                            PARKING.getDoor().hideArmorStandsName();
+                        }
+                        if(!UNDERGROUND_CRYPTS.getDoor().isOpened()) {
+                            UNDERGROUND_CRYPTS.getDoor().setArmorStand2Name();
+                        } else {
+                            UNDERGROUND_CRYPTS.getDoor().hideArmorStandsName();
+                        }
                         CRYPTS.getDoor().hideArmorStandsName();
                     }
                 },
             new Location(world, 23, 6, 5),
             new Location(world, 25, 6, 5)
+        )),
+        PARKING(new Doors(
+                Component.text("Parking").color(TextColor.color(130, 130, 140)),
+                new Location(world, 33, 2, 2),
+                new Location(world, 31, 4, 2), //DOOR LOCATION
+                100,
+                Arrays.asList(
+                        new Location(world, 28, 6, -7), //SPAWN ZONES
+                        new Location(world, 26, 6, -16),
+                        new Location(world, 18, 6, -9),
+                        new Location(world, 11, 6, -20)
+                ),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        PARKING.getDoor().hideArmorStandsName();
+                    }
+                },
+                new Location(world, 32, 2, 1), //ARMORSTAND1
+                new Location(world, 32, 2, 3) //ARMORSTAND2
+        )),
+        UNDERGROUND_CRYPTS(new Doors(
+                Component.text("Underground").color(TextColor.color(130, 130, 140)),
+                new Location(world, 24, 2, 12),
+                new Location(world, 24, 4, 14),
+                100,
+            Arrays.asList(
+                new Location(world, 15, 1, 6),
+                new Location(world, 10, 1, 25),
+                new Location(world, 0, 1, 1),
+                new Location(world, 14, 1, 12)
+            ),
+                    new Runnable() {
+            @Override
+            public void run() {
+                if(!CRYPTS.getDoor().isOpened()) {
+                    CRYPTS.getDoor().setArmorStand2Name();
+                } else {
+                    CRYPTS.getDoor().hideArmorStandsName();
+                }
+                if(!PARKING.getDoor().isOpened()) {
+                    PARKING.getDoor().setArmorStand2Name();
+                } else {
+                    PARKING.getDoor().hideArmorStandsName();
+                }
+                if(!UNDERGROUND_LABORATORY.getDoor().isOpened()) {
+                    UNDERGROUND_LABORATORY.getDoor().setArmorStand2Name();
+                } else {
+                    UNDERGROUND_LABORATORY.getDoor().hideArmorStandsName();
+                }
+                if(!UNDERGROUND_DUNGEON.getDoor().isOpened()) {
+                    UNDERGROUND_DUNGEON.getDoor().setArmorStand2Name();
+                } else {
+                    UNDERGROUND_DUNGEON.getDoor().hideArmorStandsName();
+                }
+                UNDERGROUND_CRYPTS.getDoor().hideArmorStandsName();
+            }
+        },
+                new Location(world, 23, 2, 13),
+                new Location(world, 25, 2, 13)
+        )),
+        UNDERGROUND_LABORATORY(new Doors(
+                Component.text("Laboratory").color(TextColor.color(50, 140, 235)),
+                new Location(world, -8, 1, -6),
+                new Location(world, -6, 3, -6), //DOOR LOCATION
+                100,
+                Arrays.asList(
+                        new Location(world, -4, 1, -8), //SPAWN ZONES
+                        new Location(world, -10, 1, -8),
+                        new Location(world, -4, 1, -14),
+                        new Location(world, -10, 1, -14),
+                        new Location(world, -16, 1, -21),
+                        new Location(world, -16, 1, -17),
+                        new Location(world, -26, 1, -19),
+                        new Location(world, -9, 6, -27)
+                ),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        if(!RESEARCH_ROOM.getDoor().isOpened()) {
+                            RESEARCH_ROOM.getDoor().setArmorStand2Name();
+                        } else {
+                            RESEARCH_ROOM.getDoor().hideArmorStandsName();
+                        }
+                        if(!GARDEN_LABORATORY.getDoor().isOpened()) {
+                            GARDEN_LABORATORY.getDoor().setArmorStand2Name();
+                        } else {
+                            GARDEN_LABORATORY.getDoor().hideArmorStandsName();
+                        }
+                        UNDERGROUND_LABORATORY.getDoor().hideArmorStandsName();
+                    }
+                },
+                new Location(world, -7, 1, -7), //ARMORSTAND1
+                new Location(world, -7, 1, -5) //ARMORSTAND2
+        )),
+        RESEARCH_ROOM(new Doors(
+                Component.text("Research Room").color(TextColor.color(50, 140, 235)),
+                new Location(world, -23, 1, -26),
+                new Location(world, -25, 3, -26), //DOOR LOCATION
+                100,
+                Arrays.asList(
+                        new Location(world, -13, -1, -25), //SPAWN ZONES
+                        new Location(world, -21, -1, -35),
+                        new Location(world, -26, 0, -28)
+                ),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        RESEARCH_ROOM.getDoor().hideArmorStandsName();
+                    }
+                },
+                new Location(world, -24, 1, -27), //ARMORSTAND1
+                new Location(world, -24, 1, -25) //ARMORSTAND2
+        )),
+        UNDERGROUND_DUNGEON(new Doors(
+                Component.text("Dungeon").color(TextColor.color(50, 140, 235)),
+                new Location(world, -11, 1, -3),
+                new Location(world, -11, 3, -1), //DOOR LOCATION
+                100,
+                        Arrays.asList(
+                        new Location(world, -18, 1, -2), //SPAWN ZONES
+                        new Location(world, -39, 6, -2),
+                        new Location(world, -42, 3, -15),
+                        new Location(world, -37, 6, -15),
+                        new Location(world, -32, 3, -15),
+                        new Location(world, -33, 12, 1),
+                        new Location(world, -43, 12, 24),
+                        new Location(world, -42, 12, -2),
+                        new Location(world, -52, 12, 2),
+                        new Location(world, -48, 12, 2),
+                        new Location(world, -56, 12, 18),
+                        new Location(world, -37, 12, 32),
+                        new Location(world, -43, 6, 11),
+                        new Location(world, -36, 6, 21),
+                        new Location(world, -22, 6, 18)
+                ),
+                        new Runnable() {
+            @Override
+            public void run() {
+                if(!GARDEN_DUNGEON.getDoor().isOpened()) {
+                    GARDEN_DUNGEON.getDoor().setArmorStand2Name();
+                } else {
+                    GARDEN_DUNGEON.getDoor().hideArmorStandsName();
+                }
+                if(!UNDERGROUND_LABORATORY.getDoor().isOpened()) {
+                    UNDERGROUND_LABORATORY.getDoor().setArmorStand2Name();
+                } else {
+                    UNDERGROUND_LABORATORY.getDoor().hideArmorStandsName();
+                }
+                if(!UNDERGROUND_CRYPTS.getDoor().isOpened()) {
+                    UNDERGROUND_CRYPTS.getDoor().setArmorStand1Name();
+                } else {
+                    UNDERGROUND_CRYPTS.getDoor().hideArmorStandsName();
+                }
+                UNDERGROUND_DUNGEON.getDoor().hideArmorStandsName();
+            }
+        },
+                new Location(world, -12, 1, -2), //ARMORSTAND1
+                new Location(world, -10, 1, -2) //ARMORSTAND2
+        )),
+        GARDEN_DUNGEON(new Doors(
+                Component.text("Dungeon").color(TextColor.color(50, 140, 235)),
+                new Location(world, -18, 6, 4),
+                new Location(world, -18, 8, 6), //DOOR LOCATION
+                100,
+                Arrays.asList(
+                        new Location(world, -18, 1, -2), //SPAWN ZONES
+                        new Location(world, -39, 6, -2),
+                        new Location(world, -42, 3, -15),
+                        new Location(world, -37, 6, -15),
+                        new Location(world, -32, 3, -15),
+                        new Location(world, -33, 12, 1),
+                        new Location(world, -43, 12, 24),
+                        new Location(world, -42, 12, -2),
+                        new Location(world, -52, 12, 2),
+                        new Location(world, -48, 12, 2),
+                        new Location(world, -56, 12, 18),
+                        new Location(world, -37, 12, 32),
+                        new Location(world, -43, 6, 11),
+                        new Location(world, -36, 6, 21),
+                        new Location(world, -22, 6, 18)
+                ),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        if(!UNDERGROUND_DUNGEON.getDoor().isOpened()) {
+                            UNDERGROUND_DUNGEON.getDoor().setArmorStand1Name();
+                        } else {
+                            UNDERGROUND_DUNGEON.getDoor().hideArmorStandsName();
+                        }
+                        GARDEN_DUNGEON.getDoor().hideArmorStandsName();
+                    }
+                },
+                new Location(world, -17, 6, 5), //ARMORSTAND1
+                new Location(world, -19, 6, 5) //ARMORSTAND2
+        )),
+        GARDEN_LABORATORY(new Doors(
+                Component.text("Laboratory").color(TextColor.color(50, 140, 235)),
+                new Location(world, -5, 6, -17),
+                new Location(world, -9, 8, -17), //DOOR LOCATION
+                100,
+                Arrays.asList(
+                        new Location(world, -4, 1, -8), //SPAWN ZONES
+                        new Location(world, -10, 1, -8),
+                        new Location(world, -4, 1, -14),
+                        new Location(world, -10, 1, -14),
+                        new Location(world, -16, 1, -21),
+                        new Location(world, -16, 1, -17),
+                        new Location(world, -26, 1, -19),
+                        new Location(world, -9, 6, -27)
+                ),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        if(!UNDERGROUND_LABORATORY.getDoor().isOpened()) {
+                            UNDERGROUND_LABORATORY.getDoor().setArmorStand1Name();
+                        } else {
+                            UNDERGROUND_LABORATORY.getDoor().hideArmorStandsName();
+                        }
+                        if(!RESEARCH_ROOM.getDoor().isOpened()) {
+                            RESEARCH_ROOM.getDoor().setArmorStand2Name();
+                        } else {
+                            RESEARCH_ROOM.getDoor().hideArmorStandsName();
+                        }
+                        GARDEN_LABORATORY.getDoor().hideArmorStandsName();
+                    }
+                },
+                new Location(world, -7, 6, -16), //ARMORSTAND1
+                new Location(world, -7, 6, -18) //ARMORSTAND2
         ));
 
         private final Doors door;

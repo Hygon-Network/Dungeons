@@ -25,7 +25,7 @@ public class DeathManager implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
 
         double coinsToRemove = 0;
 

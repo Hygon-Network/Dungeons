@@ -121,7 +121,7 @@ public class WaveManager implements Listener {
 
         Bukkit.broadcast(Component.text("☠").color(TextColor.color(170, 0, 0))
             .append(Component.text(" | ").color(TextColor.color(107, 107, 107)))
-            .append(Component.text("Vague" + waveId).color(TextColor.color(200, 20, 20))
+            .append(Component.text("Vague " + waveId).color(TextColor.color(200, 20, 20))
                 .append(Component.text(" » ").color(TextColor.color(NamedTextColor.GRAY)))
                 .append(Component.text(wave.getMaxZombies() + " Zombies").color(TextColor.color(255, 255, 75)))));
 

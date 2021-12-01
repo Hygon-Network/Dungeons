@@ -36,6 +36,7 @@ public class ShopGUI extends GUI implements Listener {
         if (event.getCurrentItem() == null) return;
         ItemStack clickedItem = event.getCurrentItem();
         if(getPlayerOpenInventoryType(player, event.getInventory()) == InventoriesList.SHOP) {
+            PlayerUtils.addCoins(player, 1000);
             event.setCancelled(true);
             if(clickedItem.isSimilar(ItemList.ARMOR_SHOP.getItem())) {
                 player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, 2, 1);

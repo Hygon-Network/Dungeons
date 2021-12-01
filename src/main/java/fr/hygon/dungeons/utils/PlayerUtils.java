@@ -118,7 +118,7 @@ public class PlayerUtils implements Listener {
          new BukkitRunnable() {
              @Override
              public void run() {
-                 player.setSaturation(20);
+                 player.setSaturation(10);
              }
          }.runTaskLater(Main.getPlugin(), 1);
     }
