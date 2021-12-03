@@ -4,6 +4,7 @@ import fr.hygon.dungeons.utils.Difficulty;
 import fr.hygon.dungeons.utils.InventoriesList;
 import fr.hygon.dungeons.utils.ItemList;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -32,7 +33,9 @@ public class DifficultySelectorGUI extends GUI implements Listener {
 
         if(Objects.equals(clickedItem.getItemMeta().displayName(), ItemList.DIFFICULTY_SELECTOR.getItem().getItemMeta().displayName())) {
             if(cooldown.containsKey(player) && cooldown.get(player) + 3000 > System.currentTimeMillis()) {
-                player.sendMessage(Component.text("Veuillez attendre 3s.").color(TextColor.color(180, 20, 20)));
+                player.sendMessage(Component.text("» ").color(TextColor.color(NamedTextColor.GRAY))
+                        .append(Component.text("Veuillez attendre avant de re-choisir une difficulté.").color(TextColor.color(230, 30, 30))));
+                player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 2, 1);
             } else {
                 cooldown.put(player, System.currentTimeMillis());
                 openInventory(player, InventoriesList.DIFFICULTY_SELECTOR);

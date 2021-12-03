@@ -26,6 +26,11 @@ public class ShopGUI extends GUI implements Listener {
 
         if(Objects.equals(clickedItem.getItemMeta().displayName(), ItemList.RADIO_ON.getItem().getItemMeta().displayName())) {
             openInventory(player, InventoriesList.SHOP);
+            player.playSound(player.getLocation(), Sound.ITEM_ARMOR_EQUIP_IRON, 2, 1);
+            event.setCancelled(true);
+        }
+        if(Objects.equals(clickedItem.getItemMeta().displayName(), ItemList.RADIO_OFF.getItem().getItemMeta().displayName())) {
+            player.playSound(player.getLocation(), Sound.ENTITY_BEE_HURT, 0.5F, 0);
             event.setCancelled(true);
         }
     }

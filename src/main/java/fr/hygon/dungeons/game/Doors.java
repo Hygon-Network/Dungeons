@@ -4,12 +4,10 @@ import fr.hygon.dungeons.Main;
 import fr.hygon.dungeons.utils.PlayerUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.title.Title;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.entity.ArmorStand;
@@ -18,6 +16,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -88,7 +87,19 @@ public class Doors {
 
         PlayerUtils.removeCoins(player, getPrice());
 
-        // TODO add sound & visual effects
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2, 0.7F);
+        for(Player players : Bukkit.getOnlinePlayers()) {
+            final Title.Times times = Title.Times.of(Duration.ofMillis(250), Duration.ofMillis(2000), Duration.ofMillis(250));
+            final Title title = Title.title(Component.text(""), ((Component.text(player.getName()).color(TextColor.color(255,100, 30)))
+                    .append(Component.text(" a ouvert ").color(TextColor.color(255,255, 75)))
+                    .append(Component.text(" ").color(TextColor.color(255,255, 75)))), times); //TODO + nom de la porte
+            players.showTitle(title);
+            players.playSound(players.getLocation(), Sound.BLOCK_IRON_DOOR_OPEN, 1.0F, -1F);
+        }
+
+        Bukkit.getWorld("world").spawnParticle(Particle.CRIT, player.getLocation().getX(), (player.getLocation().getY() + 1), player.getLocation().getZ(), 20, 0.3, 0.5, 0.3, 0.3, null, true);
+        Bukkit.getWorld("world").spawnParticle(Particle.FIREWORKS_SPARK, player.getLocation().getX(), (player.getLocation().getY() + 1), player.getLocation().getZ(), 20, 0.3, 0.5, 0.2, 0.5, null, true);
+        Bukkit.getWorld("world").spawnParticle(Particle.FLAME, player.getLocation().getX(), (player.getLocation().getY() + 1), player.getLocation().getZ(), 20, 0.3, 0.5, 0.3, 0.2, null, true);
     }
 
     public List<Block> getDoorsBlocks() {
@@ -208,7 +219,7 @@ public class Doors {
             new Location(world, 0, 0, 0)
         )),
         YARD(new Doors(
-           Component.text("Yard").color(TextColor.color(75, 75, 90)),
+           Component.text("Yard").color(TextColor.color(150, 150, 150)),
             new Location(world, 16, 9, 12),
             new Location(world, 16, 6, 14),
             100,
@@ -227,8 +238,8 @@ public class Doors {
                     CRYPTS.getDoor().setArmorStand1Name();
                 }
             },
-            new Location(world, 15, 6, 13),
-            new Location(world, 17, 6, 13)
+            new Location(world, 15.5, 6, 13.5),
+            new Location(world, 17.5, 6, 13.5)
         )),
         CRYPTS(new Doors(
             Component.text("Crypts").color(TextColor.color(130, 130, 140)),
@@ -261,11 +272,11 @@ public class Doors {
                         CRYPTS.getDoor().hideArmorStandsName();
                     }
                 },
-            new Location(world, 23, 6, 5),
-            new Location(world, 25, 6, 5)
+            new Location(world, 23.5, 6, 5.5),
+            new Location(world, 25.5, 6, 5.5)
         )),
         PARKING(new Doors(
-                Component.text("Parking").color(TextColor.color(130, 130, 140)),
+                Component.text("Parking").color(TextColor.color(220, 75, 20)),
                 new Location(world, 33, 2, 2),
                 new Location(world, 31, 4, 2), //DOOR LOCATION
                 100,
@@ -281,11 +292,11 @@ public class Doors {
                         PARKING.getDoor().hideArmorStandsName();
                     }
                 },
-                new Location(world, 32, 2, 1), //ARMORSTAND1
-                new Location(world, 32, 2, 3) //ARMORSTAND2
+                new Location(world, 32.5, 2, 1.5), //ARMORSTAND1
+                new Location(world, 32.5, 2, 3.5) //ARMORSTAND2
         )),
         UNDERGROUND_CRYPTS(new Doors(
-                Component.text("Underground").color(TextColor.color(130, 130, 140)),
+                Component.text("Underground").color(TextColor.color(50, 150, 15)),
                 new Location(world, 24, 2, 12),
                 new Location(world, 24, 4, 14),
                 100,
@@ -321,11 +332,11 @@ public class Doors {
                 UNDERGROUND_CRYPTS.getDoor().hideArmorStandsName();
             }
         },
-                new Location(world, 23, 2, 13),
-                new Location(world, 25, 2, 13)
+                new Location(world, 23.5, 2, 13.5),
+                new Location(world, 25.5, 2, 13.5)
         )),
         UNDERGROUND_LABORATORY(new Doors(
-                Component.text("Laboratory").color(TextColor.color(50, 140, 235)),
+                Component.text("Laboratory").color(TextColor.color(20, 100, 200)),
                 new Location(world, -8, 1, -6),
                 new Location(world, -6, 3, -6), //DOOR LOCATION
                 100,
@@ -352,14 +363,24 @@ public class Doors {
                         } else {
                             GARDEN_LABORATORY.getDoor().hideArmorStandsName();
                         }
+                        if(!UNDERGROUND_DUNGEON.getDoor().isOpened()) {
+                            UNDERGROUND_DUNGEON.getDoor().setArmorStand2Name();
+                        } else {
+                            UNDERGROUND_DUNGEON.getDoor().hideArmorStandsName();
+                        }
+                        if(!UNDERGROUND_CRYPTS.getDoor().isOpened()) {
+                            UNDERGROUND_CRYPTS.getDoor().setArmorStand1Name();
+                        } else {
+                            UNDERGROUND_CRYPTS.getDoor().hideArmorStandsName();
+                        }
                         UNDERGROUND_LABORATORY.getDoor().hideArmorStandsName();
                     }
                 },
-                new Location(world, -7, 1, -7), //ARMORSTAND1
-                new Location(world, -7, 1, -5) //ARMORSTAND2
+                new Location(world, -6.5, 1, -6.5), //ARMORSTAND1
+                new Location(world, -6.5, 1, -4.5) //ARMORSTAND2
         )),
         RESEARCH_ROOM(new Doors(
-                Component.text("Research Room").color(TextColor.color(50, 140, 235)),
+                Component.text("Research Room").color(TextColor.color(150, 50, 220)),
                 new Location(world, -23, 1, -26),
                 new Location(world, -25, 3, -26), //DOOR LOCATION
                 100,
@@ -374,11 +395,11 @@ public class Doors {
                         RESEARCH_ROOM.getDoor().hideArmorStandsName();
                     }
                 },
-                new Location(world, -24, 1, -27), //ARMORSTAND1
-                new Location(world, -24, 1, -25) //ARMORSTAND2
+                new Location(world, -23.5, 1, -26.5), //ARMORSTAND1
+                new Location(world, -23.5, 1, -24.5) //ARMORSTAND2
         )),
         UNDERGROUND_DUNGEON(new Doors(
-                Component.text("Dungeon").color(TextColor.color(50, 140, 235)),
+                Component.text("Dungeon").color(TextColor.color(100, 115, 120)),
                 new Location(world, -11, 1, -3),
                 new Location(world, -11, 3, -1), //DOOR LOCATION
                 100,
@@ -420,11 +441,11 @@ public class Doors {
                 UNDERGROUND_DUNGEON.getDoor().hideArmorStandsName();
             }
         },
-                new Location(world, -12, 1, -2), //ARMORSTAND1
-                new Location(world, -10, 1, -2) //ARMORSTAND2
+                new Location(world, -11.5, 1, -1.5), //ARMORSTAND1
+                new Location(world, -9.5, 1, -1.5) //ARMORSTAND2
         )),
         GARDEN_DUNGEON(new Doors(
-                Component.text("Dungeon").color(TextColor.color(50, 140, 235)),
+                Component.text("Dungeon").color(TextColor.color(100, 115, 120)),
                 new Location(world, -18, 6, 4),
                 new Location(world, -18, 8, 6), //DOOR LOCATION
                 100,
@@ -456,11 +477,11 @@ public class Doors {
                         GARDEN_DUNGEON.getDoor().hideArmorStandsName();
                     }
                 },
-                new Location(world, -17, 6, 5), //ARMORSTAND1
-                new Location(world, -19, 6, 5) //ARMORSTAND2
+                new Location(world, -16.5, 6, 5.5), //ARMORSTAND1
+                new Location(world, -18.5, 6, 5.5) //ARMORSTAND2
         )),
         GARDEN_LABORATORY(new Doors(
-                Component.text("Laboratory").color(TextColor.color(50, 140, 235)),
+                Component.text("Laboratory").color(TextColor.color(20, 100, 200)),
                 new Location(world, -5, 6, -17),
                 new Location(world, -9, 8, -17), //DOOR LOCATION
                 100,
@@ -490,8 +511,8 @@ public class Doors {
                         GARDEN_LABORATORY.getDoor().hideArmorStandsName();
                     }
                 },
-                new Location(world, -7, 6, -16), //ARMORSTAND1
-                new Location(world, -7, 6, -18) //ARMORSTAND2
+                new Location(world, -6.5, 6, -15.5), //ARMORSTAND1
+                new Location(world, -6.5, 6, -17.5) //ARMORSTAND2
         ));
 
         private final Doors door;
